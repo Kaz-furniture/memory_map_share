@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Memory Map Share</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="location">Memory Map Share</string>
+    <string name="ok">OK</string>
+    <string name="location_permission_denied_dialog_title">位置情報</string>
+    <string name="location_permission_denied_dialog_message">位置情報の使用権限が拒否されました。\n後から設定する場合、アプリ設定から権限を設定し直してください。</string>
+    <string name="locationText">%1$d %2$f, %3$f</string>
 </resources>

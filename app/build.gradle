@@ -1,11 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+    buildFeatures {
+        dataBinding true
+    }
 
     defaultConfig {
         applicationId "com.kaz_furniture.memorymapshare"
@@ -40,7 +45,37 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //liveData..
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
+
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+
+    //coroutineScope
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
+    //fragment 拡張
+    implementation 'androidx.fragment:fragment-ktx:1.3.0'
+    //recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    //viewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    //activity拡張
+    implementation "androidx.activity:activity-ktx:1.2.0"
+    //coroutineScope
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    // MaterialDialog
+    implementation "com.afollestad.material-dialogs:core:3.3.0"
+    implementation "com.afollestad.material-dialogs:input:3.3.0"
 }
