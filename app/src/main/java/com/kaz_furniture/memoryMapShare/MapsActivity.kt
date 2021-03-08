@@ -23,6 +23,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     lateinit var binding: ActivityMapsBinding
+    var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +40,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         locationCallback = object: LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?:return
-                Timber.d("locationCheck = 123")
                 for (location in locationResult.locations) {
                     updateCount++
-                    Timber.d("locationCheck = ${updateCount}, ${location.longitude}")
+                    currentLatLng = LatLng(location.latitude, location.longitude)
                     binding.locationText.text = getString(R.string.locationText, updateCount, location.longitude, location.latitude) //"[${updateCount}] ${location.latitude}, ${location.longitude}"
                 }
             }
@@ -116,11 +116,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         requestPermission()
         // Add a marker in Sydney and move the camera
         val place = LatLng(35.6598, 139.7024)
-        map.addMarker(MarkerOptions().position(place).title("Marker in Shibuya"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(place))
+        map.addMarker(MarkerOptions().position(place).title("this is marker!"))
+        map.setInfoWindowAdapter(MyInfoWindowAdapter(this))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
     }
 
     companion object {
+        private const val DEFAULT_ZOOM_LEVEL = 14F
+        private const val DEFAULT_LATITUDE = 35.6598
+        private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000
     }
 }
