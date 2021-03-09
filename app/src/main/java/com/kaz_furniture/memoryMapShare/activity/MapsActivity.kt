@@ -1,8 +1,11 @@
-package com.kaz_furniture.memoryMapShare
+package com.kaz_furniture.memoryMapShare.activity
 
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
@@ -14,14 +17,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.kaz_furniture.memoryMapShare.MyInfoWindowAdapter
+import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
-import timber.log.Timber
+import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private val viewModel: MapsViewModel by viewModels()
     lateinit var binding: ActivityMapsBinding
     var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
 
@@ -35,6 +41,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        binding.fab.setOnClickListener {
+            binding.horizon.visibility = View.VISIBLE
+            binding.vertical.visibility = View.VISIBLE
+            binding.okButton.visibility = View.VISIBLE
+        }
+        binding.okButton.setOnClickListener {
+            Toast.makeText(this, "CLICKED", Toast.LENGTH_LONG).show()
+            binding.horizon.visibility = View.INVISIBLE
+            binding.vertical.visibility = View.INVISIBLE
+            binding.okButton.visibility = View.GONE
+        }
 
         var updateCount = 0
         locationCallback = object: LocationCallback() {

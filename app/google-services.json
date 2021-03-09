@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1032801333632",
+    "project_id": "memory-map-share--dev",
+    "storage_bucket": "memory-map-share--dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032801333632:android:d63a81513a360fa05b9165",
+        "android_client_info": {
+          "package_name": "com.kaz_furniture.memorymapshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032801333632-rcea218fknnk0bo4fuf0oarc90j0ljda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2MjDB8Uou7iok0MLqpN7zPHadBgLs_yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032801333632-rcea218fknnk0bo4fuf0oarc90j0ljda.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
