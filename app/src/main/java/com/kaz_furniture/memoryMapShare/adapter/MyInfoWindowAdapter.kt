@@ -1,4 +1,4 @@
-package com.kaz_furniture.memoryMapShare
+package com.kaz_furniture.memoryMapShare.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
+import com.kaz_furniture.memoryMapShare.R
 
 class MyInfoWindowAdapter(private val context: Context): GoogleMap.InfoWindowAdapter {
     override fun getInfoContents(p0: Marker?): View? {

@@ -1,8 +1,11 @@
 package com.kaz_furniture.memoryMapShare.activity
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -17,12 +20,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.kaz_furniture.memoryMapShare.MyInfoWindowAdapter
+import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
+import timber.log.Timber
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -43,15 +47,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         binding.fab.setOnClickListener {
-            binding.horizon.visibility = View.VISIBLE
-            binding.vertical.visibility = View.VISIBLE
+            binding.fab.visibility = View.GONE
+            binding.centerMarker.visibility = View.VISIBLE
             binding.okButton.visibility = View.VISIBLE
+            binding.cancelButton.visibility = View.VISIBLE
         }
         binding.okButton.setOnClickListener {
-            Toast.makeText(this, "CLICKED", Toast.LENGTH_LONG).show()
-            binding.horizon.visibility = View.INVISIBLE
-            binding.vertical.visibility = View.INVISIBLE
+            viewModel.selectedLocation = map.cameraPosition.target
+            binding.fab.visibility = View.VISIBLE
+            binding.centerMarker.visibility = View.INVISIBLE
             binding.okButton.visibility = View.GONE
+            binding.cancelButton.visibility = View.GONE
+            Timber.d("selectedLatLng = ${map.cameraPosition.target.latitude}, ${map.cameraPosition.target.longitude}")
         }
 
         var updateCount = 0
@@ -67,22 +74,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun requestPermission() {
-        val permissionAccessCoarseLocationApproved =
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        if (!permissionAccessCoarseLocationApproved) {
+        if (!locationPermission(this)) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
         } else map.isMyLocationEnabled = true
     }
 
+    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                map.isMyLocationEnabled = true
-            else
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 showPermissionDeniedDialog()
+            if (locationPermission(this))
+                map.isMyLocationEnabled = true
         }
     }
 
@@ -96,9 +102,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         stopLocationUpdate()
     }
 
+    @SuppressLint("MissingPermission")
     private fun startLocationUpdate() {
-        val locationRequest = createLocationRequest() ?: return
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        if (locationPermission(this)) {
+            val locationRequest = createLocationRequest() ?: return
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        } else return
     }
 
     private fun stopLocationUpdate() {
@@ -114,9 +123,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showPermissionDeniedDialog() {
         MaterialDialog(this).show {
-            title(res = R.string.location_permission_denied_dialog_title)
-            message(res = R.string.location_permission_denied_dialog_message)
-            positiveButton(res = R.string.ok)
+            title(R.string.location_permission_denied_dialog_title)
+            message(R.string.location_permission_denied_dialog_message)
+            positiveButton(R.string.openSetting) {
+                startActivity(
+                        Intent(
+                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", packageName, null)
+                        )
+                )
+            }
+            negativeButton(R.string.ok) {
+                dismiss()
+            }
         }
     }
 
@@ -132,7 +151,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         requestPermission()
-        // Add a marker in Sydney and move the camera
         val place = LatLng(35.6598, 139.7024)
         map.addMarker(MarkerOptions().position(place).title("this is marker!"))
         map.setInfoWindowAdapter(MyInfoWindowAdapter(this))
