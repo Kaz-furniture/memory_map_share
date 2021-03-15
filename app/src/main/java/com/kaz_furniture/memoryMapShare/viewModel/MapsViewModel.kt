@@ -15,7 +15,7 @@ class MapsViewModel: ViewModel() {
 
     fun createMaker() {
         val newMarker = Marker().apply {
-            createdAt = Date()
+            memoryTime = Date()
             latLng = selectedLocation
             //追加！！！！！
         }

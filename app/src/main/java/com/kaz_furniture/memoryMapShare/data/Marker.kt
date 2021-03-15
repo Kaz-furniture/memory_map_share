@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 @IgnoreExtraProperties
 class Marker: Serializable {
     var markerId = "${System.currentTimeMillis()}"
-    var createdAt = Date()
+    var memoryTime = Date()
     var latLng: LatLng? = null
     var deletedAt: Date? = null
     var imageIdList = ArrayList<String>()

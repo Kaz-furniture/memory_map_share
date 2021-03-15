@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -24,7 +23,6 @@ import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
-import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -58,7 +56,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.centerMarker.visibility = View.INVISIBLE
             binding.okButton.visibility = View.GONE
             binding.cancelButton.visibility = View.GONE
-            Timber.d("selectedLatLng = ${map.cameraPosition.target.latitude}, ${map.cameraPosition.target.longitude}")
+            launchCreateMarkerActivity()
+//            Timber.d("selectedLatLng = ${map.cameraPosition.target.latitude}, ${map.cameraPosition.target.longitude}")
+        }
+        binding.cancelButton.setOnClickListener {
+            binding.fab.visibility = View.VISIBLE
+            binding.centerMarker.visibility = View.INVISIBLE
+            binding.okButton.visibility = View.GONE
+            binding.cancelButton.visibility = View.GONE
         }
 
         var updateCount = 0
@@ -100,6 +105,11 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     override fun onPause() {
         super.onPause()
         stopLocationUpdate()
+    }
+
+    private fun launchCreateMarkerActivity() {
+        val intent = CreateMarkerActivity.newIntent(this)
+        startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
 
     @SuppressLint("MissingPermission")
@@ -162,5 +172,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000
+        private const val REQUEST_CODE_CREATE = 2000
     }
 }
