@@ -19,6 +19,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.FirebaseAuthCredentialsProvider
 import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
@@ -51,12 +54,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.cancelButton.visibility = View.VISIBLE
         }
         binding.okButton.setOnClickListener {
-            viewModel.selectedLocation = map.cameraPosition.target
+//            viewModel.selectedLocation = map.cameraPosition.target
             binding.fab.visibility = View.VISIBLE
             binding.centerMarker.visibility = View.INVISIBLE
             binding.okButton.visibility = View.GONE
             binding.cancelButton.visibility = View.GONE
             launchCreateMarkerActivity()
+            if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity()
 //            Timber.d("selectedLatLng = ${map.cameraPosition.target.latitude}, ${map.cameraPosition.target.longitude}")
         }
         binding.cancelButton.setOnClickListener {
@@ -107,8 +111,12 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         stopLocationUpdate()
     }
 
+    private fun launchLoginActivity() {
+        LoginActivity.start(this)
+    }
+
     private fun launchCreateMarkerActivity() {
-        val intent = CreateMarkerActivity.newIntent(this)
+        val intent = CreateMarkerActivity.newIntent(this, map.cameraPosition.target.latitude, map.cameraPosition.target.longitude)
         startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
 

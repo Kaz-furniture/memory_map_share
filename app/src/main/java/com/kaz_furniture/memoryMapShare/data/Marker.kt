@@ -10,10 +10,16 @@ import kotlin.collections.ArrayList
 class Marker: Serializable {
     var markerId = "${System.currentTimeMillis()}"
     var memoryTime = Date()
-    var latLng: LatLng? = null
+    var latLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
+    var createdAt = Date()
     var deletedAt: Date? = null
     var imageIdList = ArrayList<String>()
     var memo = ""
     var groupId = ""
+
+    companion object {
+        private const val DEFAULT_LATITUDE = 35.6598
+        private const val DEFAULT_LONGITUDE = 139.7024
+    }
 
 }

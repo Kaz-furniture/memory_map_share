@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="name"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="nameError"
+            type="String" />
+
+        <variable
+            name="email"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="emailError"
+            type="String" />
+
+        <variable
+            name="password"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="passwordError"
+            type="String" />
+
+        <variable
+            name="passwordConfirm"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="canSubmit"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/container"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/userNameLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="24dp"
+            android:text="@string/userName"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/userNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLength="20"
+            android:inputType="text"
+            android:text="@={name}"
+            app:error="@{nameError}"
+            android:autofillHints="@string/userNameInput"
+            android:hint="@string/userNameInput"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userNameLabel" />
+
+        <TextView
+            android:id="@+id/emailLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/email"
+            android:textSize="16sp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userNameEditText" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:maxLength="128"
+            android:text="@={email}"
+            app:error="@{emailError}"
+            android:hint="@string/email"
+            android:autofillHints="@string/email"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+
+
+        <TextView
+            android:id="@+id/passwordLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:maxLength="64"
+            android:text="@string/password"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@={password}"
+            android:autofillHints="@string/password"
+            android:hint="@string/password"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+
+
+        <TextView
+            android:id="@+id/passwordConfirmLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxLength="64"
+            android:text="@string/passwordConfirm"
+            android:textSize="16sp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+
+
+        <EditText
+            android:id="@+id/passwordConfirmEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@={passwordConfirm}"
+            android:textSize="16sp"
+            android:autofillHints="@string/password"
+            android:hint="@string/password"
+            app:error="@{passwordError}"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordConfirmLabel" />
+
+        <TextView
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:enabled="@{canSubmit}"
+            android:text="@string/register"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:shadowDx="2.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="-2.0"
+            android:background="#0055ff"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordConfirmEditText" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

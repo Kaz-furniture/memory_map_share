@@ -4,13 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityCreateMarkerBinding
 import com.kaz_furniture.memoryMapShare.viewModel.CreateMarkerViewModel
-import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateMarkerActivity: BaseActivity() {
     private val viewModel: CreateMarkerViewModel by viewModels()
@@ -21,9 +23,27 @@ class CreateMarkerActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_marker)
         binding.lifecycleOwner = this
+        viewModel.latitude = intent.getDoubleExtra(KEY_LATITUDE, DEFAULT_LATITUDE)
+        viewModel.longitude = intent.getDoubleExtra(KEY_LONGITUDE, DEFAULT_LONGITUDE)
         binding.selectedImageView.customAdapter.refresh(listOf())
+        binding.timeDateDisplay.text = android.text.format.DateFormat.format(getString(R.string.date), Date())
         binding.selectImageButton.setOnClickListener {
             launchAlbumActivity()
+        }
+        binding.dateSelectButton.setOnClickListener {
+            launchDateSelectDialog()
+        }
+        binding.submitButton.setOnClickListener {
+            viewModel.imageUpload(uriList)
+        }
+    }
+
+    private fun launchDateSelectDialog() {
+        MaterialDialog(this).show {
+            datePicker { _, date ->
+                binding.timeDateDisplay.text = android.text.format.DateFormat.format(getString(R.string.date), date)
+                viewModel.calendar = date
+            }
         }
     }
 
@@ -56,8 +76,15 @@ class CreateMarkerActivity: BaseActivity() {
 
     companion object {
         private const val REQUEST_CODE_ALBUM = 1000
-        fun newIntent(context: Context): Intent {
-            return Intent(context, CreateMarkerActivity::class.java)
+        private const val KEY_LATITUDE = "key latitude"
+        private const val KEY_LONGITUDE = "key longitude"
+        private const val DEFAULT_LATITUDE = 35.6598
+        private const val DEFAULT_LONGITUDE = 139.7024
+        fun newIntent(context: Context, latitude: Double, longitude: Double): Intent {
+            return Intent(context, CreateMarkerActivity::class.java).apply {
+                putExtra(KEY_LATITUDE, latitude)
+                putExtra(KEY_LONGITUDE, longitude)
+            }
         }
     }
 }
