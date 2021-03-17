@@ -27,4 +27,5 @@
     <string name="passwordConfirm">パスワード（確認）</string>
     <string name="register">登録</string>
     <string name="emailLabel">メールアドレス</string>
+    <string name="group_private">プライベート</string>
 </resources>
