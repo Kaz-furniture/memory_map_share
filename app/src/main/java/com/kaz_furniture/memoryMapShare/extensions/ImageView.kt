@@ -18,7 +18,7 @@ fun ImageView.exampleImageFirst(marker: Marker) {
 
 @BindingAdapter("exampleImageSecond")
 fun ImageView.exampleImageSecond(marker: Marker) {
-    if (marker.imageIdList.isNullOrEmpty()) setImageBitmap(null)
+    if (marker.imageIdList.size <= 1) setImageBitmap(null)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(marker.imageIdList[1]))
             .placeholder(R.drawable.loading_image)
             .into(this)
@@ -26,7 +26,7 @@ fun ImageView.exampleImageSecond(marker: Marker) {
 
 @BindingAdapter("exampleImageThird")
 fun ImageView.exampleImageThird(marker: Marker) {
-    if (marker.imageIdList.isNullOrEmpty()) setImageBitmap(null)
+    if (marker.imageIdList.size <= 2) setImageBitmap(null)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(marker.imageIdList[2]))
             .placeholder(R.drawable.loading_image)
             .into(this)

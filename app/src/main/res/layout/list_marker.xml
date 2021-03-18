@@ -13,6 +13,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="8dp">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#888888"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,8 +59,8 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:id="@+id/image_view_1"
             app:exampleImageFirst="@{marker}"
             android:layout_marginTop="4dp"
@@ -62,8 +70,8 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:visibility="gone"
             android:id="@+id/image_view_2"
             app:exampleImageSecond="@{marker}"
@@ -73,8 +81,8 @@
             app:layout_constraintStart_toEndOf="@id/image_view_1"/>
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:visibility="gone"
             app:exampleImageThird="@{marker}"
             android:id="@+id/image_view_3"

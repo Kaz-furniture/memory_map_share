@@ -16,6 +16,7 @@ import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerBinding
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerEmptyBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MyPageViewModel
+import timber.log.Timber
 
 class MarkerListView: RecyclerView {
 
@@ -80,7 +81,13 @@ class MarkerListView: RecyclerView {
                         moreHorizon.visibility = View.INVISIBLE
                     }
                 }
-                data.imageIdList.size == 3 -> holder.binding.moreHorizon.visibility = View.INVISIBLE
+                data.imageIdList.size == 3 -> {
+                    holder.binding.apply {
+                        moreHorizon.visibility = View.INVISIBLE
+                        imageView2.visibility = View.VISIBLE
+                        imageView3.visibility = View.VISIBLE
+                    }
+                }
                 data.imageIdList.size > 3 -> {
                     holder.binding.apply {
                         imageView2.visibility = View.VISIBLE
