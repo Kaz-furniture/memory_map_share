@@ -35,7 +35,7 @@ class LoginViewModel: ViewModel() {
         } else true
     }
 
-    fun login(context: Context, activity: LoginActivity) {
+    fun login(context: Context) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value ?:"", password.value ?:"")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

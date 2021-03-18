@@ -8,6 +8,7 @@ import kotlin.collections.ArrayList
 
 @IgnoreExtraProperties
 class Marker: Serializable {
+    var userId = ""
     var markerId = "${System.currentTimeMillis()}"
     var memoryTime = Date()
     var latLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)

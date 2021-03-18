@@ -29,7 +29,7 @@ class LoginActivity: BaseActivity() {
         binding.email = viewModel.email
         binding.password = viewModel.password
         binding.login.setOnClickListener {
-            viewModel.login(this,this@LoginActivity)
+            viewModel.login(this)
         }
         viewModel.canSubmit.observe(this, Observer {
             binding.canSubmit = it
@@ -66,7 +66,9 @@ class LoginActivity: BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) finish()
+        if (resultCode == RESULT_OK) {
+            finish()
+        }
     }
 
     companion object {

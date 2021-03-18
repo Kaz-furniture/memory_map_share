@@ -28,4 +28,5 @@
     <string name="register">登録</string>
     <string name="emailLabel">メールアドレス</string>
     <string name="group_private">プライベート</string>
+    <string name="setting">設定</string>
 </resources>

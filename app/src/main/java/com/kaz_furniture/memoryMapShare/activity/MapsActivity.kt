@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -39,6 +40,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_maps)
+        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getMyUser()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps)
         binding.lifecycleOwner = this
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -61,13 +63,23 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.cancelButton.visibility = View.GONE
             launchCreateMarkerActivity()
             if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity()
-//            Timber.d("selectedLatLng = ${map.cameraPosition.target.latitude}, ${map.cameraPosition.target.longitude}")
         }
         binding.cancelButton.setOnClickListener {
             binding.fab.visibility = View.VISIBLE
             binding.centerMarker.visibility = View.INVISIBLE
             binding.okButton.visibility = View.GONE
             binding.cancelButton.visibility = View.GONE
+        }
+        binding.moreButton.setOnClickListener {
+            PopupMenu(this, it).also { popupMenu ->
+                popupMenu.menuInflater.inflate(R.menu.menu_appbar_more, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when(menuItem.itemId) {
+                        R.id.setting -> return@setOnMenuItemClickListener true
+                    }
+                    return@setOnMenuItemClickListener true
+                }
+            }.show()
         }
 
         var updateCount = 0

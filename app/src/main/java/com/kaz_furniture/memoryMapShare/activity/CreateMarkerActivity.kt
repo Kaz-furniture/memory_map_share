@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityCreateMarkerBinding
 import com.kaz_furniture.memoryMapShare.viewModel.CreateMarkerViewModel
@@ -34,8 +35,13 @@ class CreateMarkerActivity: BaseActivity() {
             launchDateSelectDialog()
         }
         binding.submitButton.setOnClickListener {
-            viewModel.imageUpload(uriList)
+            if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity()
+            else viewModel.imageUpload(uriList)
         }
+    }
+
+    private fun launchLoginActivity() {
+
     }
 
     private fun launchDateSelectDialog() {
