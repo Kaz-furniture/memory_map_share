@@ -75,6 +75,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 popupMenu.menuInflater.inflate(R.menu.menu_appbar_more, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when(menuItem.itemId) {
+                        R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
                         R.id.setting -> return@setOnMenuItemClickListener true
                     }
                     return@setOnMenuItemClickListener true

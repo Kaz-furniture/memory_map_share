@@ -15,6 +15,7 @@ class Marker: Serializable {
     var createdAt = Date()
     var deletedAt: Date? = null
     var imageIdList = ArrayList<String>()
+    var locationName = ""
     var memo = ""
     var groupId = ""
 

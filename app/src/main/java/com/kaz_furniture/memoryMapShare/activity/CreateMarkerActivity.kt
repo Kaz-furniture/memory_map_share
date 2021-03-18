@@ -28,6 +28,8 @@ class CreateMarkerActivity: BaseActivity() {
         viewModel.longitude = intent.getDoubleExtra(KEY_LONGITUDE, DEFAULT_LONGITUDE)
         binding.selectedImageView.customAdapter.refresh(listOf())
         binding.timeDateDisplay.text = android.text.format.DateFormat.format(getString(R.string.date), Date())
+        binding.locationName = viewModel.locationNameInput
+        binding.memo = viewModel.memoInput
         binding.selectImageButton.setOnClickListener {
             launchAlbumActivity()
         }
@@ -38,10 +40,17 @@ class CreateMarkerActivity: BaseActivity() {
             if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity()
             else viewModel.imageUpload(uriList)
         }
+        viewModel.imageUploaded.observe(this, androidx.lifecycle.Observer {
+            viewModel.imageUploadedInt(it)
+        })
+        viewModel.imageUploadFinished.observe(this, androidx.lifecycle.Observer {
+            setResult(RESULT_OK)
+            finish()
+        })
     }
 
     private fun launchLoginActivity() {
-
+        LoginActivity.start(this)
     }
 
     private fun launchDateSelectDialog() {

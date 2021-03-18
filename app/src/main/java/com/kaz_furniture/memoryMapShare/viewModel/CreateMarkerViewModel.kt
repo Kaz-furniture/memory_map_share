@@ -22,12 +22,19 @@ class CreateMarkerViewModel: ViewModel() {
     var calendar: Calendar = Calendar.getInstance()
     var latitude: Double? = null
     var longitude: Double? = null
+    val imageUploaded = MutableLiveData<Int>()
     private var currentTimeMillis = ""
     private val imageUrlList = ArrayList<String>()
+    private val imageUploadedIntList = ArrayList<Int>()
+    var imageListSize = 0
+    val imageUploadFinished = MutableLiveData<Boolean>()
+
+    val locationNameInput = MutableLiveData<String>()
+    val memoInput = MutableLiveData<String>()
 
     fun imageUpload(uriList: List<Uri>) {
         currentTimeMillis = System.currentTimeMillis().toString()
-//        val listSize = uriList.size
+        imageListSize = uriList.size
         for ((index, value) in uriList.withIndex()) {
             val inputStream = applicationContext.contentResolver.openInputStream(value)
             val bitmap = BitmapFactory.decodeStream(BufferedInputStream(inputStream))
@@ -39,9 +46,11 @@ class CreateMarkerViewModel: ViewModel() {
                     .putBytes(data)
                     .addOnCompleteListener {
                         Timber.d("uploaded = $index")
+                        imageUploaded.postValue(index)
                         Toast.makeText(applicationContext, "upload $index", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener {
+                        imageUploaded.postValue(index)
                         Toast.makeText(applicationContext, "UPLOAD_FAILED", Toast.LENGTH_SHORT).show()
                     }
         }
@@ -59,8 +68,9 @@ class CreateMarkerViewModel: ViewModel() {
             memoryTime = calendar.time
             groupId = myUser.userId
             imageIdList = imageUrlList
+            memo = memoInput.value ?:""
+            locationName = locationNameInput.value ?:""
         }
-        Timber.d("submittedMarker = ${marker.imageIdList}")
 
         FirebaseFirestore.getInstance()
                 .collection("markers")
@@ -69,6 +79,12 @@ class CreateMarkerViewModel: ViewModel() {
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "SUBMIT_FAILED", Toast.LENGTH_SHORT).show()
                 }
+    }
+
+    fun imageUploadedInt(index: Int) {
+        imageUploadedIntList.add(index)
+        Timber.d("uploadedIndex = $index, $imageUploadedIntList")
+        if (imageUploadedIntList.size == imageListSize) imageUploadFinished.postValue(true)
     }
 
 }

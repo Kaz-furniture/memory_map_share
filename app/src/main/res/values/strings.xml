@@ -11,7 +11,7 @@
     <string name="decide">決定</string>
     <string name="emptyImage">NO IMAGE</string>
     <string name="selectImage">画像を選択</string>
-    <string name="content">内容</string>
+    <string name="content">メモ</string>
     <string name="time_date">日にち</string>>
     <string name="date">yyyy/M/d</string>
     <string name="dateSelect">日にちを選択</string>
@@ -29,4 +29,10 @@
     <string name="emailLabel">メールアドレス</string>
     <string name="group_private">プライベート</string>
     <string name="setting">設定</string>
+    <string name="myPage">マイページ</string>
+    <string name="logout">ログアウト</string>
+    <string name="allMarker">登録一覧</string>
+    <string name="friendAdd">友だち登録</string>
+    <string name="locationName">場所の名前</string>
+    <string name="markerEmpty">NO MARKER</string>
 </resources>

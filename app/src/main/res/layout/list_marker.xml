@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="marker"
+            type="com.kaz_furniture.memoryMapShare.data.Marker" />
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_name"
+            android:textSize="20sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            tools:text="渋谷のハチ公前出口周辺"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/memory_time"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/memory_time"
+            tools:text="2021/08/23"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/memo_display"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            tools:text="ppppppppppppppp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_name"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/image_view_1"
+            app:exampleImageFirst="@{marker}"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toBottomOf="@id/memo_display"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="gone"
+            android:id="@+id/image_view_2"
+            app:exampleImageSecond="@{marker}"
+            android:layout_marginStart="4dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="@id/image_view_1"
+            app:layout_constraintStart_toEndOf="@id/image_view_1"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="gone"
+            app:exampleImageThird="@{marker}"
+            android:id="@+id/image_view_3"
+            android:layout_marginStart="4dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="@id/image_view_2"
+            app:layout_constraintStart_toEndOf="@id/image_view_2"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/more_horizon"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_baseline_more_horiz_24"
+            app:layout_constraintStart_toEndOf="@id/image_view_3"
+            app:layout_constraintTop_toTopOf="@id/image_view_1"
+            app:layout_constraintBottom_toBottomOf="@id/image_view_1"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/myPage"
+        android:title="@string/myPage"/>
+
+    <item
+        android:id="@+id/addFriend"
+        android:title="@string/friendAdd"/>
+
     <item
         android:id="@+id/setting"
         android:title="@string/setting"/>
