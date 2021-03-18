@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMyPageBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MyPageViewModel
@@ -19,6 +20,8 @@ class MyPageActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_my_page)
         binding.lifecycleOwner = this
         viewModel.loadMarker()
+        binding.userNameView.text = myUser.name
+        binding.userIdTextView.text = getString(R.string.userIdDisplay, myUser.userId)
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadMarker()
         }

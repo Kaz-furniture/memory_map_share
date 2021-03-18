@@ -64,7 +64,7 @@ class CreateMarkerViewModel: ViewModel() {
     private fun submitMarker() {
         val marker = Marker().apply {
             userId = myUser.userId
-            latLng = LatLng(latitude ?:return, longitude ?:return)
+            latLng = Marker.MyLatLng(latitude ?:return, longitude ?:return)
             memoryTime = calendar.time
             groupId = myUser.userId
             imageIdList = imageUrlList

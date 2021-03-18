@@ -42,7 +42,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/userIdTextView"
-                    android:textSize="18sp"
                     tools:text="ID : pppppppppppp"
                     app:layout_constraintStart_toStartOf="@id/userNameView"
                     app:layout_constraintTop_toBottomOf="@id/userNameView"

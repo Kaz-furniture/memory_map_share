@@ -6,6 +6,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.GlideApp
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.Marker
+import timber.log.Timber
 
 @BindingAdapter("exampleImageFirst")
 fun ImageView.exampleImageFirst(marker: Marker) {

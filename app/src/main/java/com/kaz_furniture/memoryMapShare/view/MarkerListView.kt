@@ -11,6 +11,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.Marker
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
+import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerBinding
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerEmptyBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MyPageViewModel
@@ -64,6 +66,12 @@ class MarkerListView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
+            holder.binding.apply {
+                marker = data
+                locationName.text = data.locationName
+                memoDisplay.text = data.memo
+                memoryTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.date), data.memoryTime)
+            }
             when {
                 data.imageIdList.size <= 1 -> holder.binding.moreHorizon.visibility = View.INVISIBLE
                 data.imageIdList.size == 2 -> {

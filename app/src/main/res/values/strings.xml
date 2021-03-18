@@ -35,4 +35,5 @@
     <string name="friendAdd">友だち登録</string>
     <string name="locationName">場所の名前</string>
     <string name="markerEmpty">NO MARKER</string>
+    <string name="userIdDisplay">ID : %1$s</string>
 </resources>
