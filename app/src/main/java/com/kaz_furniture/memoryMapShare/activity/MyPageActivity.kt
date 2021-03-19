@@ -25,6 +25,10 @@ class MyPageActivity: BaseActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadMarker()
         }
+        binding.userForIcon = myUser
+        binding.editProfileButton.setOnClickListener {
+            ProfileEditActivity.start(this)
+        }
 
         viewModel.markersList.observe(this, Observer {
             binding.markerListView.customAdapter.refresh(it)

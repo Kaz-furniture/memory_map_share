@@ -6,6 +6,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.GlideApp
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.Marker
+import com.kaz_furniture.memoryMapShare.data.User
 import timber.log.Timber
 
 @BindingAdapter("exampleImageFirst")
@@ -30,4 +31,12 @@ fun ImageView.exampleImageThird(marker: Marker) {
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(marker.imageIdList[2]))
             .placeholder(R.drawable.loading_image)
             .into(this)
+}
+
+@BindingAdapter("userIconFromUser")
+fun ImageView.userIconFromUser(user: User?) {
+    if (user == null || user.imageUrl.isBlank()) GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
+    else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(user.imageUrl))
+        .placeholder(R.drawable.loading_image)
+        .into(this)
 }

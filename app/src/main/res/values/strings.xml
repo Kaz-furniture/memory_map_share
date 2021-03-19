@@ -37,4 +37,9 @@
     <string name="markerEmpty">NO MARKER</string>
     <string name="userIdDisplay">ID : %1$s</string>
     <string name="privateText">PRIVATE</string>
+    <string name="profileEdit">編集</string>
+    <string name="profileEdit2">プロフィール編集</string>
+    <string name="profileImageEdit">プロフィール画像編集</string>
+    <string name="selectIconImage">画像を選択</string>
+    <string name="userNameEdit">ユーザー名を編集</string>
 </resources>

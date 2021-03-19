@@ -13,4 +13,5 @@ class User {
     var imageUrl: String = ""
     var followingUserIds: List<String> = listOf()
     var fcmToken: String = ""
+    var groupIds = listOf<String>()
 }

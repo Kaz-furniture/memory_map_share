@@ -51,7 +51,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val menuItems = listOf<String>("GROUP0", "PRIVATE", "GROUP2")
+        val menuItems = listOf<String>("PRIVATE")
         val adapter = ArrayAdapter(this, R.layout.dropdown_menu_group, menuItems)
         binding.outlinedExposedDropdown.apply {
             setAdapter(adapter)
