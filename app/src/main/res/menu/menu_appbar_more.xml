@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/myPage"
-        android:title="@string/myPage"/>
+        android:title="@string/myPage" />
 
     <item
         android:id="@+id/addFriend"

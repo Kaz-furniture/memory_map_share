@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.ContextThemeWrapper
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -48,6 +50,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        val menuItems = listOf<String>("PRIVATE", "GROUP")
+        val adapter = ArrayAdapter(this, R.layout.dropdown_menu_group, menuItems)
+        binding.outlinedExposedDropdown.apply {
+            setAdapter(adapter)
+            setText("PRI")
+        }
 
         binding.fab.setOnClickListener {
             binding.fab.visibility = View.GONE
