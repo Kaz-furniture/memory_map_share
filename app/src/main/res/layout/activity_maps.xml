@@ -20,24 +20,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/app_title"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_marginStart="8dp"
                     android:text="@string/app_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
-
-<!--                <Button-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:id="@+id/group_select_button"-->
-<!--                    android:text="@string/group_private"-->
-<!--                    android:backgroundTint="@color/white"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:layout_marginStart="12dp"-->
-<!--                    app:layout_constraintStart_toEndOf="@id/app_title"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/outlined_exposed_dropdown_container"
@@ -51,7 +40,6 @@
                     <AutoCompleteTextView
                         android:id="@+id/outlined_exposed_dropdown"
                         android:editable="false"
-                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>

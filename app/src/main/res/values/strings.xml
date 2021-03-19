@@ -36,4 +36,5 @@
     <string name="locationName">場所の名前</string>
     <string name="markerEmpty">NO MARKER</string>
     <string name="userIdDisplay">ID : %1$s</string>
+    <string name="privateText">PRIVATE</string>
 </resources>
