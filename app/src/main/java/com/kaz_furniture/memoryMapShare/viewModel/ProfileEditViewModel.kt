@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
+import timber.log.Timber
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 

@@ -46,4 +46,5 @@
     <string name="searchHint">ユーザー名 または IDを入力</string>
     <string name="addButton">追加</string>
     <string name="noSearchedUser">検索結果はありません</string>
+    <string name="removeFriend">解除</string>
 </resources>

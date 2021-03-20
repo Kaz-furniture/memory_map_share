@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerBinding
@@ -69,10 +72,17 @@ class SearchedUserView: RecyclerView {
             val data = items[position]
             holder.binding.apply {
                 userForIcon = data
-                userId.text = data.userId
+                userId.text = applicationContext.getString(R.string.userIdDisplay, data.userId)
                 userName.text = data.name
+                when {
+                    myUser.userId == data.userId -> friendAddButton.visibility = View.GONE
+                    myUser.followingUserIds.contains(data.userId) -> friendAddButton.setText(R.string.removeFriend)
+                    else -> friendAddButton.setText(R.string.addButton)
+                }
+                friendAddButton.setOnClickListener {
+                    viewModel.addButtonClick(data)
+                }
             }
-
         }
 
         class ItemViewHolder(val binding: ListSearchedUserBinding): RecyclerView.ViewHolder(binding.root)

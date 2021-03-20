@@ -10,6 +10,7 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -42,7 +43,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_maps)
-        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getMyUser()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps)
         binding.lifecycleOwner = this
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -86,8 +86,12 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when(menuItem.itemId) {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
-                        R.id.addFriend -> FriendSearchActivity.start(this)
+                        R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
                         R.id.setting -> return@setOnMenuItemClickListener true
+                        R.id.logout -> {
+                            FirebaseAuth.getInstance().signOut()
+                            Toast.makeText(this, "ログアウトしました", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     return@setOnMenuItemClickListener true
                 }
@@ -127,6 +131,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
+        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getMyUser()
         startLocationUpdate()
     }
 

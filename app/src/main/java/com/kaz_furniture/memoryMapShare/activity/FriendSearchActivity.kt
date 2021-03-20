@@ -26,6 +26,16 @@ class FriendSearchActivity: BaseActivity() {
         viewModel.searchedUsersList.observe(this, Observer {
             binding.searchedUsersView.customAdapter.refresh(it)
         })
+        viewModel.buttonClicked.observe(this, Observer {
+            binding.searchedUsersView.customAdapter.refresh(viewModel.searchedUsersList.value ?: listOf())
+        })
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = getString(R.string.friendAdd)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     companion object {
