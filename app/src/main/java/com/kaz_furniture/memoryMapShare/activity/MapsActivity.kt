@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
@@ -14,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.location.*
 
@@ -24,8 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.FirebaseAuthCredentialsProvider
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
@@ -50,13 +50,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        val menuItems = listOf<String>("PRIVATE")
-        val adapter = ArrayAdapter(this, R.layout.dropdown_menu_group, menuItems)
-        binding.outlinedExposedDropdown.apply {
-            setAdapter(adapter)
-            setText(getString(R.string.privateText), false)
-        }
 
         binding.fab.setOnClickListener {
             binding.fab.visibility = View.GONE
@@ -110,6 +103,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 }
             }
         }
+        viewModel.groupGet.observe(this, Observer {
+            val menuItems = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }.map { it.groupName }
+            binding.groupNameDisplay.text = menuItems[0]
+        })
     }
 
     @SuppressLint("MissingPermission")
@@ -132,7 +129,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getMyUser()
+        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getAllUser()
+        viewModel.getAllGroup()
         startLocationUpdate()
     }
 
