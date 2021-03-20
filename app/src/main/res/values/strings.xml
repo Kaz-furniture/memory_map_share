@@ -32,7 +32,7 @@
     <string name="myPage">マイページ</string>
     <string name="logout">ログアウト</string>
     <string name="allMarker">登録一覧</string>
-    <string name="friendAdd">友だち登録</string>
+    <string name="friendAdd">友だちを追加</string>
     <string name="locationName">場所の名前</string>
     <string name="markerEmpty">NO MARKER</string>
     <string name="userIdDisplay">ID : %1$s</string>
@@ -42,4 +42,8 @@
     <string name="profileImageEdit">プロフィール画像編集</string>
     <string name="selectIconImage">画像を選択</string>
     <string name="userNameEdit">ユーザー名を編集</string>
+    <string name="searchUser">ユーザーを検索</string>
+    <string name="searchHint">ユーザー名 または IDを入力</string>
+    <string name="addButton">追加</string>
+    <string name="noSearchedUser">検索結果はありません</string>
 </resources>

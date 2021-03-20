@@ -79,12 +79,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.okButton.visibility = View.GONE
             binding.cancelButton.visibility = View.GONE
         }
+
         binding.moreButton.setOnClickListener {
             PopupMenu(this, it).also { popupMenu ->
                 popupMenu.menuInflater.inflate(R.menu.menu_appbar_more, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when(menuItem.itemId) {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
+                        R.id.addFriend -> FriendSearchActivity.start(this)
                         R.id.setting -> return@setOnMenuItemClickListener true
                     }
                     return@setOnMenuItemClickListener true

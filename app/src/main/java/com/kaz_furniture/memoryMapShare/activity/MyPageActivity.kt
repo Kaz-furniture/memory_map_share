@@ -20,12 +20,10 @@ class MyPageActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_my_page)
         binding.lifecycleOwner = this
         viewModel.loadMarker()
-        binding.userNameView.text = myUser.name
         binding.userIdTextView.text = getString(R.string.userIdDisplay, myUser.userId)
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadMarker()
         }
-        binding.userForIcon = myUser
         binding.editProfileButton.setOnClickListener {
             ProfileEditActivity.start(this)
         }
@@ -34,6 +32,12 @@ class MyPageActivity: BaseActivity() {
             binding.markerListView.customAdapter.refresh(it)
             binding.swipeRefresh.isRefreshing = false
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.userForIcon = myUser
+        binding.userNameView.text = myUser.name
     }
 
     companion object {

@@ -37,6 +37,7 @@ fun ImageView.exampleImageThird(marker: Marker) {
 fun ImageView.userIconFromUser(user: User?) {
     if (user == null || user.imageUrl.isBlank()) GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(user.imageUrl))
-        .placeholder(R.drawable.loading_image)
-        .into(this)
+            .circleCrop()
+            .placeholder(R.drawable.loading_image)
+            .into(this)
 }

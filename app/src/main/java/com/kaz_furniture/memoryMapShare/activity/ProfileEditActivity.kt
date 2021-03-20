@@ -65,6 +65,7 @@ class ProfileEditActivity: BaseActivity() {
                 }
                 UCrop.REQUEST_CROP -> {
                     val resultUri = UCrop.getOutput(data)
+                    uCropSrcUri = resultUri
                     GlideApp.with(this).load(resultUri).circleCrop()
                             .placeholder(R.drawable.loading_image)
                             .into(binding.roundedImageView)

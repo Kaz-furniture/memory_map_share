@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="searchInput"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searchUser"
+            android:id="@+id/search_label"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="12dp"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_edit_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:text="@={searchInput}"
+            android:hint="@string/searchHint"
+            app:layout_constraintTop_toBottomOf="@id/search_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/widget_search"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/widget_search"
+            android:src="@drawable/ic_baseline_search_24"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@id/search_edit_text"
+            app:layout_constraintTop_toTopOf="@id/search_edit_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.kaz_furniture.memoryMapShare.view.SearchedUserView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/searched_users_view"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/search_edit_text"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
