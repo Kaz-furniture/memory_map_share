@@ -47,4 +47,10 @@
     <string name="addButton">追加</string>
     <string name="noSearchedUser">検索結果はありません</string>
     <string name="removeFriend">解除</string>
+    <string name="createGroup">グループを作成</string>
+    <string name="groupName">グループ名</string>
+    <string name="inputGroupName">グループ名を入力</string>
+    <string name="memberSelect">参加するメンバーを選択</string>
+    <string name="noFriend">友だちを追加してください</string>
+    <string name="create">作成</string>
 </resources>

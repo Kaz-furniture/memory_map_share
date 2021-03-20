@@ -87,6 +87,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                     when(menuItem.itemId) {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
                         R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
+                        R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else CreateGroupActivity.start(this)
                         R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()

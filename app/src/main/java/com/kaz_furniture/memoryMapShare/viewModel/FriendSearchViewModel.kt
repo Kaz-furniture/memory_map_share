@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.data.User
@@ -30,6 +31,10 @@ class FriendSearchViewModel: ViewModel() {
             if (myUser.followingUserIds.contains(user.userId)) remove(user.userId) else add(user.userId)
         }
         myUser.followingUserIds = newUsersList
+        allUserList.apply {
+            removeAll { it.userId == myUser.userId }
+            add(myUser)
+        }
 
         FirebaseFirestore.getInstance()
                 .collection("users")

@@ -21,5 +21,6 @@ class MemoryMapShareApplication: Application() {
     companion object {
         lateinit var applicationContext: Context
         var myUser: User = User()
+        val allUserList = ArrayList<User>()
     }
 }
