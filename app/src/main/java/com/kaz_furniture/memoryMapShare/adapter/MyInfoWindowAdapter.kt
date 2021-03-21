@@ -22,15 +22,15 @@ class MyInfoWindowAdapter(private val context: Context): GoogleMap.InfoWindowAda
     }
 
     private fun setUpWindow(marker: Marker): View {
-//        return MyInfoWindowBinding.inflate(LayoutInflater.from(context), null, false).apply {
-//            val myMarker = marker.tag as com.kaz_furniture.memoryMapShare.data.Marker? ?:return@apply
-//            markerForImage = myMarker
-//            locationName.text = myMarker.locationName
-//            Timber.d("markerTag = ${markerForImage?.locationName}")
-//        }.root
-        return LayoutInflater.from(context).inflate(R.layout.my_info_window, null, false).apply {
-            val markerForImage = marker.tag as com.kaz_furniture.memoryMapShare.data.Marker?
-            findViewById<TextView>(R.id.location_name).text = markerForImage?.locationName
-        }
+        return MyInfoWindowBinding.inflate(LayoutInflater.from(context), null, false).apply {
+            val myMarker = marker.tag as com.kaz_furniture.memoryMapShare.data.Marker? ?:return@apply
+            markerForImage = myMarker
+            locationName.text = myMarker.locationName
+            Timber.d("markerTag = ${markerForImage?.locationName}")
+        }.root
+//        return LayoutInflater.from(context).inflate(R.layout.my_info_window, null, false).apply {
+//            val markerForImage = marker.tag as com.kaz_furniture.memoryMapShare.data.Marker?
+//            findViewById<TextView>(R.id.location_name).text = markerForImage?.locationName
+//        }
     }
 }
