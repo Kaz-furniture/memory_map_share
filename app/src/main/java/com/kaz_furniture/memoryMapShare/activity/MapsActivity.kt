@@ -1,11 +1,14 @@
 package com.kaz_furniture.memoryMapShare.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Gravity
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
@@ -30,6 +33,7 @@ import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
+import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -39,6 +43,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     private val viewModel: MapsViewModel by viewModels()
     lateinit var binding: ActivityMapsBinding
     var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
+    lateinit var dataStore: SharedPreferences //= getSharedPreferences("DataStore", MODE_PRIVATE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +55,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
+        val savedGroupId = dataStore.getString("KEY","")
+        binding.groupNameDisplay.text = savedGroupText(savedGroupId)
 
         binding.fab.setOnClickListener {
             binding.fab.visibility = View.GONE
@@ -71,6 +80,22 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.centerMarker.visibility = View.INVISIBLE
             binding.okButton.visibility = View.GONE
             binding.cancelButton.visibility = View.GONE
+        }
+
+        binding.groupNameDisplay.setOnClickListener {
+            PopupMenu(this, it).also { popupMenu ->
+                val myGroupList = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }
+                popupMenu.menu.add(1,0,0, getString(R.string.privateText))
+                myGroupList.forEachIndexed { index, group ->
+                    popupMenu.menu.add(1, index + 1, index + 1, group.groupName)
+                }
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    val selectedGroup = if (menuItem.itemId != 0) myGroupList[menuItem.itemId - 1].groupId else null
+                    binding.groupNameDisplay.text = allGroupList.firstOrNull { value -> value.groupId == selectedGroup }?.groupName ?:getString(R.string.privateText)
+                    saveGroupId(selectedGroup)
+                    return@setOnMenuItemClickListener true
+                }
+            }.show()
         }
 
         binding.moreButton.setOnClickListener {
@@ -105,8 +130,19 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
         viewModel.groupGet.observe(this, Observer {
             val menuItems = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }.map { it.groupName }
-            binding.groupNameDisplay.text = menuItems[0]
+//            binding.groupNameDisplay.text = menuItems[0]
         })
+    }
+
+    private fun saveGroupId(groupId: String?) {
+        val editor = dataStore.edit()
+        editor.putString("KEY", groupId)
+        editor.apply()
+    }
+
+    private fun savedGroupText(savedGroupId: String?): String {
+        return if (savedGroupId.isNullOrBlank()) getString(R.string.privateText)
+        else allGroupList.firstOrNull {it.groupId == savedGroupId}?.groupName ?:getString(R.string.privateText)
     }
 
     @SuppressLint("MissingPermission")
