@@ -28,9 +28,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
+import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
 import timber.log.Timber
@@ -43,11 +45,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     private val viewModel: MapsViewModel by viewModels()
     lateinit var binding: ActivityMapsBinding
     var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
-    lateinit var dataStore: SharedPreferences //= getSharedPreferences("DataStore", MODE_PRIVATE)
+    lateinit var dataStore: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_maps)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps)
         binding.lifecycleOwner = this
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -109,6 +110,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                         R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()
+                            myUser = User()
+                            binding.groupNameDisplay.text = getString(R.string.privateText)
                             Toast.makeText(this, "ログアウトしました", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -122,15 +125,20 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?:return
                 for (location in locationResult.locations) {
-                    updateCount++
                     currentLatLng = LatLng(location.latitude, location.longitude)
-                    binding.locationText.text = getString(R.string.locationText, updateCount, location.longitude, location.latitude) //"[${updateCount}] ${location.latitude}, ${location.longitude}"
+                    updateCount++
+//                    if (updateCount == 1) map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
+                    binding.locationText.text = getString(R.string.locationText, updateCount, location.longitude, location.latitude)
                 }
             }
         }
-        viewModel.groupGet.observe(this, Observer {
-            val menuItems = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }.map { it.groupName }
-//            binding.groupNameDisplay.text = menuItems[0]
+
+        viewModel.markerFinished.observe(this, Observer {
+            for (value in allMarkerList) {
+                map.addMarker(MarkerOptions().position(LatLng(value.latLng.latitude, value.latLng.longitude))).apply {
+                    tag = value
+                }
+            }
         })
     }
 
@@ -165,8 +173,11 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getAllUser()
-        viewModel.getAllGroup()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            viewModel.getAllUser()
+            viewModel.getAllMarker()
+            viewModel.getAllGroup()
+        }
         startLocationUpdate()
     }
 
@@ -233,10 +244,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         requestPermission()
-        val place = LatLng(35.6598, 139.7024)
-        map.addMarker(MarkerOptions().position(place).title("this is marker!"))
+//        val place = LatLng(35.6598, 139.7024)
+//        map.addMarker(MarkerOptions().position(place).title("this is marker!"))
         map.setInfoWindowAdapter(MyInfoWindowAdapter(this))
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
+//        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
     }
 
     companion object {

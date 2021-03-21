@@ -47,6 +47,13 @@ class CreateMarkerActivity: BaseActivity() {
             setResult(RESULT_OK)
             finish()
         })
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = getString(R.string.createMarker)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     private fun launchLoginActivity() {

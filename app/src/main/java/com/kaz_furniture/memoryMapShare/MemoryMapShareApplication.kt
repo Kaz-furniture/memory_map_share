@@ -2,6 +2,7 @@ package com.kaz_furniture.memoryMapShare
 
 import android.app.Application
 import android.content.Context
+import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.data.ShareGroup
 import com.kaz_furniture.memoryMapShare.data.User
 import timber.log.Timber
@@ -24,5 +25,6 @@ class MemoryMapShareApplication: Application() {
         var myUser: User = User()
         val allUserList = ArrayList<User>()
         var allGroupList = ArrayList<ShareGroup>()
+        val allMarkerList = ArrayList<Marker>()
     }
 }

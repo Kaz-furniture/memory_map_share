@@ -30,7 +30,13 @@ class CreateGroupActivity: BaseActivity() {
             finish()
         })
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.createGroup)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     companion object {

@@ -5,14 +5,16 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
+import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.data.ShareGroup
 import com.kaz_furniture.memoryMapShare.data.User
 import java.util.*
 
 class MapsViewModel: ViewModel() {
-    val groupGet = MutableLiveData<Boolean>()
+    val markerFinished = MutableLiveData<Boolean>()
 
     fun getAllUser() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?:return
@@ -42,7 +44,20 @@ class MapsViewModel: ViewModel() {
                         clear()
                         addAll(result)
                     }
-                    groupGet.postValue(true)
+                }
+    }
+
+    fun getAllMarker() {
+        FirebaseFirestore.getInstance()
+                .collection("markers")
+                .get()
+                .addOnCompleteListener {
+                    val result = it.result?.toObjects(Marker::class.java) ?: listOf()
+                    allMarkerList.apply {
+                        clear()
+                        addAll(result)
+                    }
+                    markerFinished.postValue(true)
                 }
     }
 }
