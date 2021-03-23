@@ -1,8 +1,11 @@
 package com.kaz_furniture.memoryMapShare.data
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.IgnoreExtraProperties
 import java.io.Serializable
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,6 +21,9 @@ class Marker: Serializable {
     var locationName = ""
     var memo = ""
     var groupId = ""
+
+    var drawable1: Drawable? = null
+    var drawable2: Drawable? = null
 
     class MyLatLng(var latitude: Double = DEFAULT_LATITUDE, var longitude: Double = DEFAULT_LONGITUDE)
 
