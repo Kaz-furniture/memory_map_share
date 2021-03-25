@@ -2,12 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="markerForImage"
-            type="com.kaz_furniture.memoryMapShare.data.Marker" />
 
-    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="#cccccc"
         android:layout_width="212dp"
