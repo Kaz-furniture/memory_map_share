@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#cccccc"
-        android:layout_width="212dp"
+        android:background="#ffcccc"
+        android:layout_width="wrap_content"
         android:layout_height="180dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="4dp"
         android:paddingBottom="4dp">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/location_name"
             android:maxLines="1"
+            android:textColor="#000000"
             android:textSize="16sp"
             android:ellipsize="end"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/date_display"
             android:textSize="12sp"
+            android:textColor="#000000"
             android:layout_marginEnd="4dp"
             tools:text="@string/date"
             app:layout_constraintTop_toBottomOf="@id/location_name"

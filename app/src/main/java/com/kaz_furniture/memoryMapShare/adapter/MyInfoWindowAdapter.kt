@@ -8,10 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.DataBindingUtil.setContentView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -23,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.GlideApp
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.MyInfoWindowBinding
 import com.kaz_furniture.memoryMapShare.extensions.exampleImageFirst
@@ -50,6 +47,7 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
 //            markerForImage = myMarker
             locationName.text = myMarker.locationName
             textView.text = myMarker.memo
+            dateDisplay.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.date), myMarker.memoryTime)
 //            Timber.d("markerTag = ${markerForImage?.locationName}")
         }
 

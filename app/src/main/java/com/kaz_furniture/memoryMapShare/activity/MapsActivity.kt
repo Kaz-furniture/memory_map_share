@@ -248,6 +248,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 //        map.addMarker(MarkerOptions().position(place).title("this is marker!"))
         map.setInfoWindowAdapter(MyInfoWindowAdapter(this))
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
+        map.setOnInfoWindowClickListener {
+            Toast.makeText(this, "CLICKED ", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
