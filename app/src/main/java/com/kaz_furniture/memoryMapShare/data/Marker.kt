@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.IgnoreExtraProperties
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.lang.ref.WeakReference
 import java.util.*

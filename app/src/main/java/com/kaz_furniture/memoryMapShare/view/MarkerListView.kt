@@ -75,16 +75,17 @@ class MarkerListView: RecyclerView {
                 memoDisplay.text = data.memo
                 memoryTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.date), data.memoryTime)
                 imageView1.setOnClickListener {
-                    viewModel.launchAlbumActivity(data.imageIdList)
+                    viewModel.launchAlbumActivity(data)
                 }
                 imageView2.setOnClickListener {
-                    viewModel.launchAlbumActivity(data.imageIdList)
+                    viewModel.launchAlbumActivity(data)
                 }
                 imageView3.setOnClickListener {
-                    viewModel.launchAlbumActivity(data.imageIdList)
+                    viewModel.launchAlbumActivity(data)
                 }
 
             }
+
             when {
                 data.imageIdList.size <= 1 -> holder.binding.moreHorizon.visibility = View.INVISIBLE
                 data.imageIdList.size == 2 -> {
@@ -104,6 +105,7 @@ class MarkerListView: RecyclerView {
                     holder.binding.apply {
                         imageView2.visibility = View.VISIBLE
                         imageView3.visibility = View.VISIBLE
+                        moreHorizon.visibility = View.VISIBLE
                     }
                 }
             }

@@ -33,7 +33,11 @@ class MyPageActivity: BaseActivity() {
             binding.swipeRefresh.isRefreshing = false
         })
         viewModel.imageViewClicked.observe(this, Observer {
-            AlbumActivity.start(this, it as ArrayList<String>)
+            AlbumActivity.start(
+                this,
+                it.imageIdList,
+                it.locationName,
+                android.text.format.DateFormat.format(getString(R.string.date), it.memoryTime).toString())
         })
     }
 

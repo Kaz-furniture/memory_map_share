@@ -9,10 +9,10 @@ import timber.log.Timber
 
 class MyPageViewModel: ViewModel() {
     val markersList = MutableLiveData<List<Marker>>()
-    val imageViewClicked = MutableLiveData<List<String>>()
+    val imageViewClicked = MutableLiveData<Marker>()
 
-    fun launchAlbumActivity(imageIdList: List<String>) {
-        imageViewClicked.postValue(imageIdList)
+    fun launchAlbumActivity(myMarker: Marker) {
+        imageViewClicked.postValue(myMarker)
     }
 
     fun loadMarker() {

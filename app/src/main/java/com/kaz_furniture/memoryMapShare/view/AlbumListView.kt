@@ -53,13 +53,16 @@ class AlbumListView: RecyclerView {
             val data = items[position]
             holder.binding.apply {
                 imageId = data
+                imageCell.setOnClickListener {
+                    viewModel.imageClick(data)
+                }
             }
         }
         class ItemViewHolder(val binding: CellAlbumViewBinding): RecyclerView.ViewHolder(binding.root)
     }
 
     companion object {
-        private const val MAX_SPAN_COUNT = 5
+        private const val MAX_SPAN_COUNT = 4
         private const val UNIT_SPAN_COUNT = 1
         private const val VIEW_TYPE_ITEM = 1
         private const val VIEW_TYPE_SECTION = 2
