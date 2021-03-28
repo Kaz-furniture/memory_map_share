@@ -32,6 +32,9 @@ class MyPageActivity: BaseActivity() {
             binding.markerListView.customAdapter.refresh(it)
             binding.swipeRefresh.isRefreshing = false
         })
+        viewModel.imageViewClicked.observe(this, Observer {
+            AlbumActivity.start(this, it as ArrayList<String>)
+        })
     }
 
     override fun onResume() {

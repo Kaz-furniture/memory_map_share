@@ -1,5 +1,6 @@
 package com.kaz_furniture.memoryMapShare.extensions
 
+import android.media.Image
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.google.firebase.storage.FirebaseStorage
@@ -40,4 +41,15 @@ fun ImageView.userIconFromUser(user: User?) {
             .circleCrop()
             .placeholder(R.drawable.loading_image)
             .into(this)
+}
+
+@BindingAdapter("albumViewFromId")
+fun ImageView.albumViewFromId(imageId: String?) {
+    imageId?.also {
+        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(it))
+            .placeholder(R.drawable.loading_image)
+            .into(this)
+    } ?: kotlin.run {
+        GlideApp.with(this).load(R.drawable.loading_image).circleCrop().into(this)
+    }
 }

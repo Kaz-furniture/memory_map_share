@@ -55,6 +55,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.FriendSearchActivity"/>
         <activity android:name=".activity.CreateGroupActivity"/>
+        <activity android:name=".activity.AlbumActivity"/>
     </application>
 
 </manifest>

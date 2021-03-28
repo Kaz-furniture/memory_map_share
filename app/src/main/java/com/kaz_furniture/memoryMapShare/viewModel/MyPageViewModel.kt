@@ -9,6 +9,11 @@ import timber.log.Timber
 
 class MyPageViewModel: ViewModel() {
     val markersList = MutableLiveData<List<Marker>>()
+    val imageViewClicked = MutableLiveData<List<String>>()
+
+    fun launchAlbumActivity(imageIdList: List<String>) {
+        imageViewClicked.postValue(imageIdList)
+    }
 
     fun loadMarker() {
         FirebaseFirestore.getInstance()

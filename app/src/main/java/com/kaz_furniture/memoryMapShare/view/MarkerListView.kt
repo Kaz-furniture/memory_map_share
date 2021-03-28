@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.Marker
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.R
+import com.kaz_furniture.memoryMapShare.activity.AlbumActivity
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerBinding
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerEmptyBinding
+import com.kaz_furniture.memoryMapShare.viewModel.AlbumViewModel
 import com.kaz_furniture.memoryMapShare.viewModel.MyPageViewModel
 import timber.log.Timber
 
@@ -72,6 +74,16 @@ class MarkerListView: RecyclerView {
                 locationName.text = data.locationName
                 memoDisplay.text = data.memo
                 memoryTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.date), data.memoryTime)
+                imageView1.setOnClickListener {
+                    viewModel.launchAlbumActivity(data.imageIdList)
+                }
+                imageView2.setOnClickListener {
+                    viewModel.launchAlbumActivity(data.imageIdList)
+                }
+                imageView3.setOnClickListener {
+                    viewModel.launchAlbumActivity(data.imageIdList)
+                }
+
             }
             when {
                 data.imageIdList.size <= 1 -> holder.binding.moreHorizon.visibility = View.INVISIBLE
