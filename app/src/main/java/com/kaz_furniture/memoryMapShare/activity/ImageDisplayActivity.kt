@@ -19,6 +19,13 @@ class ImageDisplayActivity: BaseActivity() {
         intent.getStringExtra(KEY_ID)?.also {
             binding.imageId = it
         } ?: finish()
+        title = ""
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+    
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     companion object {
