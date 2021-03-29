@@ -15,8 +15,8 @@
         android:layout_marginTop="8dp">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:id="@+id/image_cell"
                 android:scaleType="centerCrop"
                 app:albumViewFromId="@{imageId}"

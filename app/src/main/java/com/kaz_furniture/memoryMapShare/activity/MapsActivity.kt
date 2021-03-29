@@ -112,6 +112,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                             FirebaseAuth.getInstance().signOut()
                             myUser = User()
                             binding.groupNameDisplay.text = getString(R.string.privateText)
+                            map.clear()
                             Toast.makeText(this, "ログアウトしました", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -248,13 +249,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 //        map.addMarker(MarkerOptions().position(place).title("this is marker!"))
         map.setInfoWindowAdapter(MyInfoWindowAdapter(this))
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE), DEFAULT_ZOOM_LEVEL))
         map.setOnInfoWindowClickListener {
             Toast.makeText(this, "CLICKED ", Toast.LENGTH_SHORT).show()
         }
     }
 
     companion object {
-        private const val DEFAULT_ZOOM_LEVEL = 14F
+        private const val DEFAULT_ZOOM_LEVEL = 8F
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000

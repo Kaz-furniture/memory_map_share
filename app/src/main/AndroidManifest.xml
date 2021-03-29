@@ -58,7 +58,6 @@
         <activity
             android:name=".activity.AlbumActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".activity.ImageDisplayActivity"/>
     </application>
 
 </manifest>

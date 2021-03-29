@@ -52,6 +52,13 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/fragment_container"/>
+
             <com.kaz_furniture.memoryMapShare.view.AlbumListView
                 android:id="@+id/album_list_view"
                 android:layout_width="match_parent"

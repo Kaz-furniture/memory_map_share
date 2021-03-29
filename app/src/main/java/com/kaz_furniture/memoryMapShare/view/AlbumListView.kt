@@ -62,9 +62,6 @@ class AlbumListView: RecyclerView {
     }
 
     companion object {
-        private const val MAX_SPAN_COUNT = 4
-        private const val UNIT_SPAN_COUNT = 1
-        private const val VIEW_TYPE_ITEM = 1
-        private const val VIEW_TYPE_SECTION = 2
+        private const val MAX_SPAN_COUNT = 2
     }
 }

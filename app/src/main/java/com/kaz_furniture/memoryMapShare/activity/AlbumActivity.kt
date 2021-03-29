@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.databinding.ActivityAlbumBinding
+import com.kaz_furniture.memoryMapShare.fragment.ImageDisplayFragment
 import com.kaz_furniture.memoryMapShare.viewModel.AlbumViewModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,11 +34,16 @@ class AlbumActivity: BaseActivity() {
             binding.dateDisplay.text = it
         }
         binding.backButton.setOnClickListener {
-            finish()
+            onBackPressed()
         }
 
         viewModel.imageClickedLiveData.observe(this, androidx.lifecycle.Observer {
-            ImageDisplayActivity.start(this, it)
+//            ImageDisplayActivity.start(this, it)
+            val fragment = ImageDisplayFragment.newInstance(it)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment, ImageDisplayFragment.tag)
+                .addToBackStack(null)
+                .commit()
         })
     }
 
