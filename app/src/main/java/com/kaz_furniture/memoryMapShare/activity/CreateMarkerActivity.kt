@@ -2,13 +2,16 @@ package com.kaz_furniture.memoryMapShare.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityCreateMarkerBinding
 import com.kaz_furniture.memoryMapShare.viewModel.CreateMarkerViewModel
@@ -19,6 +22,7 @@ class CreateMarkerActivity: BaseActivity() {
     private val viewModel: CreateMarkerViewModel by viewModels()
     lateinit var binding: ActivityCreateMarkerBinding
     private val uriList = ArrayList<Uri>()
+    lateinit var dataStore: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,15 @@ class CreateMarkerActivity: BaseActivity() {
         binding.timeDateDisplay.text = android.text.format.DateFormat.format(getString(R.string.date), Date())
         binding.locationName = viewModel.locationNameInput
         binding.memo = viewModel.memoInput
+
+        dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
+        val savedGroupId = dataStore.getString("KEY","")?.also {
+            if (it.isNotBlank())
+                viewModel.selectedGroupId = it
+            else return@also
+        }
+        binding.groupNameDisplay.text = savedGroupText(savedGroupId)
+
         binding.selectImageButton.setOnClickListener {
             launchAlbumActivity()
         }
@@ -40,6 +53,22 @@ class CreateMarkerActivity: BaseActivity() {
             if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity()
             else viewModel.imageUpload(uriList)
         }
+        binding.groupNameDisplay.setOnClickListener {
+            PopupMenu(this, it).also { popupMenu ->
+                val myGroupList = MemoryMapShareApplication.allGroupList.filter { value -> MemoryMapShareApplication.myUser.groupIds.contains(value.groupId) }
+                popupMenu.menu.add(1,0,0, getString(R.string.privateText))
+                myGroupList.forEachIndexed { index, group ->
+                    popupMenu.menu.add(1, index + 1, index + 1, group.groupName)
+                }
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    val selectedGroupId = if (menuItem.itemId != 0) myGroupList[menuItem.itemId - 1].groupId else null
+                    viewModel.selectedGroupId = selectedGroupId
+                    binding.groupNameDisplay.text = MemoryMapShareApplication.allGroupList.firstOrNull { value -> value.groupId == selectedGroupId }?.groupName ?:getString(R.string.privateText)
+                    return@setOnMenuItemClickListener true
+                }
+            }.show()
+        }
+
         viewModel.imageUploaded.observe(this, androidx.lifecycle.Observer {
             viewModel.imageUploadedInt(it)
         })

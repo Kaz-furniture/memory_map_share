@@ -37,7 +37,8 @@ class MyPageActivity: BaseActivity() {
                 this,
                 it.imageIdList,
                 it.locationName,
-                android.text.format.DateFormat.format(getString(R.string.date), it.memoryTime).toString())
+                android.text.format.DateFormat.format(getString(R.string.date), it.memoryTime).toString(),
+                it.memo)
         })
     }
 

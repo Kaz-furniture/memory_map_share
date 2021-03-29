@@ -6,6 +6,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
+import com.kaz_furniture.memoryMapShare.R
 
 open class BaseActivity: AppCompatActivity() {
 
@@ -20,4 +22,11 @@ open class BaseActivity: AppCompatActivity() {
             InputMethodManager.HIDE_NOT_ALWAYS
         )
     }
+
+    fun savedGroupText(savedGroupId: String?): String {
+        return if (savedGroupId.isNullOrBlank()) getString(R.string.privateText)
+        else MemoryMapShareApplication.allGroupList.firstOrNull {it.groupId == savedGroupId}?.groupName ?:getString(
+            R.string.privateText)
+    }
+
 }

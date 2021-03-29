@@ -1,16 +1,13 @@
 package com.kaz_furniture.memoryMapShare.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Gravity
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -32,10 +29,10 @@ import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allM
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
+import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
-import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -91,9 +88,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                     popupMenu.menu.add(1, index + 1, index + 1, group.groupName)
                 }
                 popupMenu.setOnMenuItemClickListener { menuItem ->
-                    val selectedGroup = if (menuItem.itemId != 0) myGroupList[menuItem.itemId - 1].groupId else null
-                    binding.groupNameDisplay.text = allGroupList.firstOrNull { value -> value.groupId == selectedGroup }?.groupName ?:getString(R.string.privateText)
-                    saveGroupId(selectedGroup)
+                    val selectedGroupId = if (menuItem.itemId != 0) myGroupList[menuItem.itemId - 1].groupId else null
+                    binding.groupNameDisplay.text = allGroupList.firstOrNull { value -> value.groupId == selectedGroupId }?.groupName ?:getString(R.string.privateText)
+                    saveGroupId(selectedGroupId)
+                    initMark(selectedGroupId)
                     return@setOnMenuItemClickListener true
                 }
             }.show()
@@ -135,23 +133,32 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         viewModel.markerFinished.observe(this, Observer {
-            for (value in allMarkerList) {
+            initMark(savedGroupId)
+        })
+    }
+
+    private fun initMark(groupId: String?) {
+        map.clear()
+        if (groupId.isNullOrBlank()) {
+            for (value in allMarkerList.filter { it.groupId == myUser.userId }) {
                 map.addMarker(MarkerOptions().position(LatLng(value.latLng.latitude, value.latLng.longitude))).apply {
                     tag = value
                 }
             }
-        })
+        } else {
+            for (value in allMarkerList.filter { it.groupId == groupId }) {
+                map.addMarker(MarkerOptions().position(LatLng(value.latLng.latitude, value.latLng.longitude))).apply {
+                    tag = value
+                }
+            }
+        }
+
     }
 
     private fun saveGroupId(groupId: String?) {
         val editor = dataStore.edit()
         editor.putString("KEY", groupId)
         editor.apply()
-    }
-
-    private fun savedGroupText(savedGroupId: String?): String {
-        return if (savedGroupId.isNullOrBlank()) getString(R.string.privateText)
-        else allGroupList.firstOrNull {it.groupId == savedGroupId}?.groupName ?:getString(R.string.privateText)
     }
 
     @SuppressLint("MissingPermission")
@@ -251,7 +258,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE), DEFAULT_ZOOM_LEVEL))
         map.setOnInfoWindowClickListener {
-            Toast.makeText(this, "CLICKED ", Toast.LENGTH_SHORT).show()
+            val myMarker = it.tag as Marker? ?: return@setOnInfoWindowClickListener
+            AlbumActivity.start(
+                this,
+                myMarker.imageIdList,
+                myMarker.locationName,
+                android.text.format.DateFormat.format(getString(R.string.date), myMarker.memoryTime).toString(),
+                myMarker.memo
+            )
         }
     }
 

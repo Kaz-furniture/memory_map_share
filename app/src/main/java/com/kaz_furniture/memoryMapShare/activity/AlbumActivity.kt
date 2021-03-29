@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.kaz_furniture.memoryMapShare.R
@@ -33,6 +34,14 @@ class AlbumActivity: BaseActivity() {
         intent.getStringExtra(KEY_DATE)?.also {
             binding.dateDisplay.text = it
         }
+        intent.getStringExtra(KEY_MEMO)?.also {
+            if (it.isBlank())
+                binding.memoTextView.visibility = View.GONE
+            else
+                binding.memoTextView.text = it
+        } ?: kotlin.run {
+            binding.memoTextView.visibility = View.GONE
+        }
         binding.backButton.setOnClickListener {
             onBackPressed()
         }
@@ -48,11 +57,13 @@ class AlbumActivity: BaseActivity() {
     }
 
     companion object {
+        private const val KEY_MEMO = "key_memo"
         private const val KEY_IMAGES = "key_image_ids"
         private const val KEY_LOCATION_NAME = "key_location_name"
         private const val KEY_DATE = "key_date"
-        fun start(activity: Activity, imageIdList: ArrayList<String>, locationName: String, memoryTime: String) {
+        fun start(activity: Activity, imageIdList: ArrayList<String>, locationName: String, memoryTime: String, memo: String) {
             activity.startActivity(Intent(activity, AlbumActivity::class.java).apply {
+                putExtra(KEY_MEMO, memo)
                 putExtra(KEY_IMAGES, imageIdList)
                 putExtra(KEY_LOCATION_NAME, locationName)
                 putExtra(KEY_DATE, memoryTime)

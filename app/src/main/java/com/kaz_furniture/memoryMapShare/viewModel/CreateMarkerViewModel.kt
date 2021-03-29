@@ -28,6 +28,7 @@ class CreateMarkerViewModel: ViewModel() {
     private val imageUploadedIntList = ArrayList<Int>()
     var imageListSize = 0
     val imageUploadFinished = MutableLiveData<Boolean>()
+    var selectedGroupId: String? = null
 
     val locationNameInput = MutableLiveData<String>()
     val memoInput = MutableLiveData<String>()
@@ -66,7 +67,7 @@ class CreateMarkerViewModel: ViewModel() {
             userId = myUser.userId
             latLng = Marker.MyLatLng(latitude ?:return, longitude ?:return)
             memoryTime = calendar.time
-            groupId = myUser.userId
+            groupId = selectedGroupId ?: myUser.userId
             imageIdList = imageUrlList
             memo = memoInput.value ?:""
             locationName = locationNameInput.value ?:""
