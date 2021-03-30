@@ -29,11 +29,10 @@ import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allM
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.adapter.MyInfoWindowAdapter
 import com.kaz_furniture.memoryMapShare.R
-import com.kaz_furniture.memoryMapShare.data.Marker
+import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
-import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -259,7 +258,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE), DEFAULT_ZOOM_LEVEL))
         map.setOnInfoWindowClickListener {
-            val myMarker = it.tag as Marker? ?: return@setOnInfoWindowClickListener
+            val myMarker = it.tag as MyMarker? ?: return@setOnInfoWindowClickListener
             AlbumActivity.start(
                 this,
                 myMarker.imageIdList,

@@ -6,12 +6,11 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
-import com.kaz_furniture.memoryMapShare.data.Marker
+import com.kaz_furniture.memoryMapShare.data.MyMarker
 import timber.log.Timber
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -63,9 +62,9 @@ class CreateMarkerViewModel: ViewModel() {
     }
 
     private fun submitMarker() {
-        val marker = Marker().apply {
+        val marker = MyMarker().apply {
             userId = myUser.userId
-            latLng = Marker.MyLatLng(latitude ?:return, longitude ?:return)
+            latLng = MyMarker.MyLatLng(latitude ?:return, longitude ?:return)
             memoryTime = calendar.time
             groupId = selectedGroupId ?: myUser.userId
             imageIdList = imageUrlList

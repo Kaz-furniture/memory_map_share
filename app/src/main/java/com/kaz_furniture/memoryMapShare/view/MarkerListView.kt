@@ -5,20 +5,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.model.Marker
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.R
-import com.kaz_furniture.memoryMapShare.activity.AlbumActivity
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerBinding
 import com.kaz_furniture.memoryMapShare.databinding.ListMarkerEmptyBinding
-import com.kaz_furniture.memoryMapShare.viewModel.AlbumViewModel
 import com.kaz_furniture.memoryMapShare.viewModel.MyPageViewModel
-import timber.log.Timber
 
 class MarkerListView: RecyclerView {
 
@@ -37,9 +32,9 @@ class MarkerListView: RecyclerView {
     class Adapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private val viewModel: MyPageViewModel by(context as ComponentActivity).viewModels()
-        private val items = mutableListOf<com.kaz_furniture.memoryMapShare.data.Marker>()
+        private val items = mutableListOf<com.kaz_furniture.memoryMapShare.data.MyMarker>()
 
-        fun refresh(list: List<com.kaz_furniture.memoryMapShare.data.Marker>) {
+        fun refresh(list: List<com.kaz_furniture.memoryMapShare.data.MyMarker>) {
             items.apply {
                 clear()
                 addAll(list)

@@ -8,7 +8,7 @@ import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allG
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
-import com.kaz_furniture.memoryMapShare.data.Marker
+import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.data.ShareGroup
 import com.kaz_furniture.memoryMapShare.data.User
 import java.util.*
@@ -52,7 +52,7 @@ class MapsViewModel: ViewModel() {
                 .collection("markers")
                 .get()
                 .addOnCompleteListener {
-                    val result = it.result?.toObjects(Marker::class.java) ?: listOf()
+                    val result = it.result?.toObjects(MyMarker::class.java) ?: listOf()
                     allMarkerList.apply {
                         clear()
                         addAll(result)

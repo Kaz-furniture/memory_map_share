@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @IgnoreExtraProperties
-class Marker: Serializable {
+class MyMarker: Serializable {
     var userId = ""
     var markerId = "${System.currentTimeMillis()}"
     var memoryTime = Date()

@@ -4,16 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
-import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
-import com.kaz_furniture.memoryMapShare.data.Marker
-import timber.log.Timber
+import com.kaz_furniture.memoryMapShare.data.MyMarker
 
 class MyPageViewModel: ViewModel() {
     val markersList = MutableLiveData<Boolean>()
-    val imageViewClicked = MutableLiveData<Marker>()
+    val imageViewClicked = MutableLiveData<MyMarker>()
 
-    fun launchAlbumActivity(myMarker: Marker) {
-        imageViewClicked.postValue(myMarker)
+    fun launchAlbumActivity(myMyMarker: MyMarker) {
+        imageViewClicked.postValue(myMyMarker)
     }
 
     fun loadMarker() {
@@ -21,9 +19,9 @@ class MyPageViewModel: ViewModel() {
                 .collection("markers")
                 .get()
                 .addOnCompleteListener { task ->
-                    val result = task.result?.toObjects(com.kaz_furniture.memoryMapShare.data.Marker::class.java) ?: listOf()
+                    val result = task.result?.toObjects(com.kaz_furniture.memoryMapShare.data.MyMarker::class.java) ?: listOf()
                     if (task.isSuccessful) {
-                        val fetchedList = ArrayList<Marker>().apply {
+                        val fetchedList = ArrayList<MyMarker>().apply {
                             clear()
                             addAll(result)
                             sortedBy { it.memoryTime }

@@ -1,20 +1,15 @@
 package com.kaz_furniture.memoryMapShare.activity
 
 import android.app.Activity
-import android.app.KeyguardManager
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.kaz_furniture.memoryMapShare.R
-import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.databinding.ActivityAlbumBinding
 import com.kaz_furniture.memoryMapShare.fragment.ImageDisplayFragment
 import com.kaz_furniture.memoryMapShare.viewModel.AlbumViewModel
-import java.util.*
 import kotlin.collections.ArrayList
 
 class AlbumActivity: BaseActivity() {

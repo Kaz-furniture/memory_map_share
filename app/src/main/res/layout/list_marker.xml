@@ -5,7 +5,7 @@
     <data>
         <variable
             name="marker"
-            type="com.kaz_furniture.memoryMapShare.data.Marker" />
+            type="com.kaz_furniture.memoryMapShare.data.MyMarker" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout

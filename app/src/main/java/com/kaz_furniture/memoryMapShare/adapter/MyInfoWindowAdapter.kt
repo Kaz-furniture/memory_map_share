@@ -1,9 +1,7 @@
 package com.kaz_furniture.memoryMapShare.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -14,17 +12,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.GlideApp
-import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
-import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.MyInfoWindowBinding
-import com.kaz_furniture.memoryMapShare.extensions.exampleImageFirst
 import timber.log.Timber
-import java.lang.Exception
 
 class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAdapter {
 
@@ -41,7 +34,7 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
     }
 
     private fun setUpWindow(marker: Marker): View? {
-        val myMarker = marker.tag as com.kaz_furniture.memoryMapShare.data.Marker?
+        val myMarker = marker.tag as com.kaz_furniture.memoryMapShare.data.MyMarker?
                 ?: return null
         val binding = MyInfoWindowBinding.inflate(LayoutInflater.from(context), null, false).apply {
 //            markerForImage = myMarker
@@ -158,9 +151,9 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
 //        }
     }
 
-    private fun check(myMarker: com.kaz_furniture.memoryMapShare.data.Marker, marker: Marker) {
+    private fun check(myMyMarker: com.kaz_furniture.memoryMapShare.data.MyMarker, marker: Marker) {
         Timber.d("checked 1")
-        if (myMarker.drawable1 == null || myMarker.drawable2 == null) {
+        if (myMyMarker.drawable1 == null || myMyMarker.drawable2 == null) {
             Timber.d("checked 2")
             return
         }
