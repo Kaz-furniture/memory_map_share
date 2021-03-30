@@ -132,9 +132,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         viewModel.markerFinished.observe(this, Observer {
-            val savedGroupId = dataStore.getString("KEY","")
+            val savedGroupId = dataStore.getString(KEY_GROUP,"")
             binding.groupNameDisplay.text = savedGroupText(savedGroupId)
-            initMark(dataStore.getString("KEY",""))
+            initMark(dataStore.getString(KEY_GROUP,""))
         })
     }
 
@@ -158,7 +158,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun saveGroupId(groupId: String?) {
         val editor = dataStore.edit()
-        editor.putString("KEY", groupId)
+        editor.putString(KEY_GROUP, groupId)
         editor.apply()
     }
 
@@ -271,6 +271,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     companion object {
+        private const val KEY_GROUP = "key_group"
         private const val DEFAULT_ZOOM_LEVEL = 8F
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
