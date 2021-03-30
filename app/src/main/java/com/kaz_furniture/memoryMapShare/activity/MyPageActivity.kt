@@ -1,10 +1,10 @@
 package com.kaz_furniture.memoryMapShare.activity
 
 import android.app.Activity
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -53,7 +53,9 @@ class MyPageActivity: BaseActivity() {
             refreshWithReverse()
         }
         binding.copyButton.setOnClickListener {
-            //!!!!!!!!
+            val clipboardManager = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager? ?: return@setOnClickListener
+            clipboardManager.setPrimaryClip(ClipData.newPlainText("", myUser.userId))
+            Toast.makeText(this, R.string.clipboard, Toast.LENGTH_SHORT).show()
         }
         binding.groupNameDisplay.setOnClickListener {
             PopupMenu(this, it).also { popupMenu ->
