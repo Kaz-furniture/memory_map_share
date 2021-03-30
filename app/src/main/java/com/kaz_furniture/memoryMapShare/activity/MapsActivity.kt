@@ -33,6 +33,7 @@ import com.kaz_furniture.memoryMapShare.data.Marker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
+import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -55,8 +56,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
-        val savedGroupId = dataStore.getString("KEY","")
-        binding.groupNameDisplay.text = savedGroupText(savedGroupId)
 
         binding.fab.setOnClickListener {
             binding.fab.visibility = View.GONE
@@ -133,7 +132,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         viewModel.markerFinished.observe(this, Observer {
-            initMark(savedGroupId)
+            val savedGroupId = dataStore.getString("KEY","")
+            binding.groupNameDisplay.text = savedGroupText(savedGroupId)
+            initMark(dataStore.getString("KEY",""))
         })
     }
 

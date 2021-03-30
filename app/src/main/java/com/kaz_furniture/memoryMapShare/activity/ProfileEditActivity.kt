@@ -43,6 +43,12 @@ class ProfileEditActivity: BaseActivity() {
             finish()
         })
         title = getString(R.string.profileEdit2)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     private fun selectImage() {

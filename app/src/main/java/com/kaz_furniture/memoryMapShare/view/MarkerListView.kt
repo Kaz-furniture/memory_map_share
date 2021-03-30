@@ -83,6 +83,9 @@ class MarkerListView: RecyclerView {
                 imageView3.setOnClickListener {
                     viewModel.launchAlbumActivity(data)
                 }
+                moreHorizon.setOnClickListener {
+                    viewModel.launchAlbumActivity(data)
+                }
 
             }
 
