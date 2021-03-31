@@ -2,6 +2,7 @@ package com.kaz_furniture.memoryMapShare.extensions
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.GlideApp
 import com.kaz_furniture.memoryMapShare.R
@@ -46,6 +47,7 @@ fun ImageView.albumViewFromId(imageId: String?) {
     imageId?.also {
         GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(it))
             .placeholder(R.drawable.loading_image)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
     } ?: kotlin.run {
         GlideApp.with(this).load(R.drawable.loading_image).circleCrop().into(this)

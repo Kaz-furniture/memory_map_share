@@ -6,11 +6,14 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.data.MyMarker
+import com.kaz_furniture.memoryMapShare.extensions.makeByteArray
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -35,15 +38,10 @@ class CreateMarkerViewModel: ViewModel() {
     fun imageUpload(uriList: List<Uri>) {
         currentTimeMillis = System.currentTimeMillis().toString()
         imageListSize = uriList.size
-        for ((index, value) in uriList.withIndex()) {
-            val inputStream = applicationContext.contentResolver.openInputStream(value)
-            val bitmap = BitmapFactory.decodeStream(BufferedInputStream(inputStream))
-            val bAOS = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bAOS)
-            val data = bAOS.toByteArray()
-
-            FirebaseStorage.getInstance().reference.child("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
-                    .putBytes(data)
+        viewModelScope.launch {
+            for ((index, value) in uriList.withIndex()) {
+                FirebaseStorage.getInstance().reference.child("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
+                    .putBytes(value.makeByteArray())
                     .addOnCompleteListener {
                         Timber.d("uploaded = $index")
                         imageUploadedInt(index)
@@ -52,12 +50,14 @@ class CreateMarkerViewModel: ViewModel() {
                         imageUploaded.postValue(index)
                         Toast.makeText(applicationContext, "UPLOAD_FAILED", Toast.LENGTH_SHORT).show()
                     }
+            }
+            imageUrlList.clear()
+            for ((index) in uriList.withIndex()) {
+                imageUrlList.add("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
+            }
+            submitMarker()
         }
-        imageUrlList.clear()
-        for ((index) in uriList.withIndex()) {
-            imageUrlList.add("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
-        }
-        submitMarker()
+
     }
 
     private fun submitMarker() {

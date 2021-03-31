@@ -33,6 +33,7 @@ import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
+import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -53,7 +54,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
 
         binding.fab.setOnClickListener {
@@ -185,7 +185,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.getAllUser()
             viewModel.getAllMarker()
             viewModel.getAllGroup()
-        }
+        } else binding.groupNameDisplay.text = getString(R.string.privateText)
         startLocationUpdate()
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
@@ -15,6 +16,25 @@ import java.util.*
 
 class MapsViewModel: ViewModel() {
     val markerFinished = MutableLiveData<Boolean>()
+
+    private fun fcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isSuccessful) {
+                val fetchedToken = it.result ?:return@addOnCompleteListener
+                if (fetchedToken != myUser.fcmToken) {
+                    myUser.fcmToken = fetchedToken
+                    uploadMyUser()
+                } else return@addOnCompleteListener
+            }
+        }
+    }
+
+    private fun uploadMyUser() {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(myUser.userId)
+            .set(myUser)
+    }
 
     fun getAllUser() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?:return
@@ -30,6 +50,7 @@ class MapsViewModel: ViewModel() {
                             addAll(fetchedList)
                         }
                         myUser = allUserList.firstOrNull { it.userId == userId } ?:return@addOnCompleteListener
+                        fcmToken()
                     }
                 }
     }
