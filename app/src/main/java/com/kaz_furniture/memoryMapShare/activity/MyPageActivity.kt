@@ -30,7 +30,7 @@ class MyPageActivity: BaseActivity() {
         viewModel.loadMarker()
         binding.userIdTextView.text = getString(R.string.userIdDisplay, myUser.userId)
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
-        val savedGroupId = dataStore.getString("KEY","")
+        val savedGroupId = dataStore.getString(KEY_GROUP,"")
         selectedGroupId = savedGroupId
         dataStore.getBoolean(KEY_IS_REVERSED, false).also {
             isReversed = it
@@ -113,6 +113,7 @@ class MyPageActivity: BaseActivity() {
     }
 
     companion object {
+        private const val KEY_GROUP = "key_group"
         private const val KEY_IS_REVERSED = "key_is_reversed"
         fun start(activity: Activity) {
             activity.startActivity(Intent(activity, MyPageActivity::class.java))

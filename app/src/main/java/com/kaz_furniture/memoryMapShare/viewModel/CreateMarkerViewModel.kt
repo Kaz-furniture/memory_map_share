@@ -46,8 +46,7 @@ class CreateMarkerViewModel: ViewModel() {
                     .putBytes(data)
                     .addOnCompleteListener {
                         Timber.d("uploaded = $index")
-                        imageUploaded.postValue(index)
-                        Toast.makeText(applicationContext, "upload $index", Toast.LENGTH_SHORT).show()
+                        imageUploadedInt(index)
                     }
                     .addOnFailureListener {
                         imageUploaded.postValue(index)
@@ -83,7 +82,7 @@ class CreateMarkerViewModel: ViewModel() {
 
     fun imageUploadedInt(index: Int) {
         imageUploadedIntList.add(index)
-        Timber.d("uploadedIndex = $index, $imageUploadedIntList")
+        Timber.d("uploadedIndex = $index, $imageUploadedIntList, $imageListSize")
         if (imageUploadedIntList.size == imageListSize) imageUploadFinished.postValue(true)
     }
 

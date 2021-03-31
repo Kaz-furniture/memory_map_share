@@ -25,6 +25,7 @@ open class BaseActivity: AppCompatActivity() {
     }
 
     fun savedGroupText(savedGroupId: String?): String {
+        Timber.d("savedId = $savedGroupId")
         return if (savedGroupId.isNullOrBlank()) getString(R.string.privateText)
         else MemoryMapShareApplication.allGroupList.firstOrNull {it.groupId == savedGroupId}?.groupName ?:getString(R.string.privateText)
     }
