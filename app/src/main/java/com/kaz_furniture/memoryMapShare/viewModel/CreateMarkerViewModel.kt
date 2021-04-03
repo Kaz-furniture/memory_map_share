@@ -16,7 +16,9 @@ import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUs
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.extensions.makeByteArray
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -33,6 +35,7 @@ class CreateMarkerViewModel: BaseViewModel() {
     var imageListSize = 0
     val imageUploadFinished = MutableLiveData<Boolean>()
     var selectedGroupId: String? = null
+    val uploadRatio = MutableLiveData<Float>()
 
     val locationNameInput = MutableLiveData<String>()
     val memoInput = MutableLiveData<String>()
@@ -40,23 +43,27 @@ class CreateMarkerViewModel: BaseViewModel() {
     fun imageUpload(uriList: List<Uri>) {
         currentTimeMillis = System.currentTimeMillis().toString()
         imageListSize = uriList.size
+
         viewModelScope.launch {
-            for ((index, value) in uriList.withIndex()) {
-                FirebaseStorage.getInstance().reference.child("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
-                    .putBytes(value.makeByteArray())
-                    .addOnCompleteListener {
-                        Timber.d("uploaded = $index")
-                        imageUploadedInt(index)
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(applicationContext, "UPLOAD_FAILED", Toast.LENGTH_SHORT).show()
-                    }
+            val pairs = uriList.withIndex().map { Pair(it.index, it.value.makeByteArray()) }
+            withContext(Dispatchers.Main) {
+                pairs.forEach { pair ->
+                    FirebaseStorage.getInstance().reference.child("${myUser.userId}/${currentTimeMillis}/${pair.first}.jpg")
+                        .putBytes(pair.second)
+                        .addOnCompleteListener {
+                            Timber.d("uploaded = ${pair.first}")
+                            imageUploadedInt(pair.first)
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "UPLOAD_FAILED", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                imageUrlList.clear()
+                for ((index) in uriList.withIndex()) {
+                    imageUrlList.add("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
+                }
+                submitMarker()
             }
-            imageUrlList.clear()
-            for ((index) in uriList.withIndex()) {
-                imageUrlList.add("${myUser.userId}/${currentTimeMillis}/${index}.jpg")
-            }
-            submitMarker()
         }
 
     }
@@ -94,6 +101,7 @@ class CreateMarkerViewModel: BaseViewModel() {
 
     private fun imageUploadedInt(index: Int) {
         imageUploadedIntList.add(index)
+        uploadRatio.postValue(imageUploadedIntList.size.toFloat() / imageListSize.toFloat())
         Timber.d("uploadedIndex = $index, $imageUploadedIntList, $imageListSize")
         if (imageUploadedIntList.size == imageListSize) imageUploadFinished.postValue(true)
     }

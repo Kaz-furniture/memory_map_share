@@ -24,6 +24,7 @@ import com.kaz_furniture.memoryMapShare.databinding.DialogUploadingImagesBinding
 import com.kaz_furniture.memoryMapShare.viewModel.CreateMarkerViewModel
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class CreateMarkerActivity: BaseActivity() {
     private val viewModel: CreateMarkerViewModel by viewModels()
@@ -60,7 +61,6 @@ class CreateMarkerActivity: BaseActivity() {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 showUploadingDialog()
                 viewModel.imageUpload(uriList)
-                setResult(RESULT_OK)
             } else launchLoginActivity()
         }
         binding.groupNameDisplay.setOnClickListener {
@@ -91,8 +91,13 @@ class CreateMarkerActivity: BaseActivity() {
         MaterialDialog(this).show {
             cancelable(false)
             val binding = DialogUploadingImagesBinding.inflate(LayoutInflater.from(this@CreateMarkerActivity), null, false)
-            chartSetting(binding)
+            chartSetting(binding, 0f)
             setContentView(binding.root)
+            binding.pieChart.centerText = "0%"
+            viewModel.uploadRatio.observe(this@CreateMarkerActivity, androidx.lifecycle.Observer {
+                chartSetting(binding, it)
+                binding.pieChart.centerText = "${(it * 100).roundToInt()}%"
+            })
             viewModel.imageUploadFinished.observe(this@CreateMarkerActivity, androidx.lifecycle.Observer {
                 dismiss()
                 setResult(RESULT_OK)
@@ -101,9 +106,9 @@ class CreateMarkerActivity: BaseActivity() {
         }
     }
 
-    private fun chartSetting(binding: DialogUploadingImagesBinding) {
+    private fun chartSetting(binding: DialogUploadingImagesBinding, uploaded: Float) {
         val dimensions = listOf("A", "B") //分割円の名称(String型)
-        val values = listOf(1f, 2f) //分割円の大きさ(Float型)
+        val values = listOf(uploaded, 1F - uploaded) //分割円の大きさ(Float型)
         var entryList = mutableListOf<PieEntry>()
         for(i in values.indices){
             entryList.add(
@@ -113,7 +118,7 @@ class CreateMarkerActivity: BaseActivity() {
 
         //PieDataSetにデータ格納
         val pieDataSet = PieDataSet(entryList, "candle").apply {
-            colors = listOf(Color.BLACK, Color.WHITE)
+            colors = listOf(Color.WHITE, Color.BLACK)
             setDrawValues(false)
         }
         binding.pieChart.apply {
