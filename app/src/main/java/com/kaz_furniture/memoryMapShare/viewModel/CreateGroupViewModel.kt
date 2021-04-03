@@ -4,13 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
+import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.ShareGroup
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.view.GroupMemberSelectView
 import timber.log.Timber
 
-class CreateGroupViewModel: ViewModel() {
+class CreateGroupViewModel: BaseViewModel() {
     val groupNameInput = MutableLiveData<String>()
     val userAndCheckedList = ArrayList<GroupMemberSelectView.Adapter.UserAndChecked>()
     val groupCreated = MutableLiveData<String>()
@@ -51,6 +53,10 @@ class CreateGroupViewModel: ViewModel() {
                             removeAll { it.userId == userId }
                             add(newUser)
                         }
+                        sendFcm(
+                            newUser, applicationContext.getString(R.string.channel_name),
+                            applicationContext.getString(R.string.channel_content, myUser.name)
+                        )
                         groupCreated.postValue(groupId)
                     }
         }

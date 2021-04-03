@@ -23,6 +23,9 @@ class FriendSearchActivity: BaseActivity() {
             viewModel.searchUser()
         }
 
+        viewModel.inputForSearch.observe(this, Observer {
+            viewModel.searchUser()
+        })
         viewModel.searchedUsersList.observe(this, Observer {
             binding.searchedUsersView.customAdapter.refresh(it)
         })

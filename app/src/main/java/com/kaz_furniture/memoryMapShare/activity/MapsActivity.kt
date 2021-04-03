@@ -163,7 +163,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.getAllMarker()
             viewModel.getAllGroup()
         } else binding.groupNameDisplay.text = getString(R.string.privateText)
-        testSendFcm()
     }
 
     private fun initMark(groupId: String?) {
@@ -247,7 +246,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun createLocationRequest(): LocationRequest? {
         return LocationRequest.create().apply {
-            interval = 10000
+            interval = 30000
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         }
     }
@@ -299,41 +298,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun testSendFcm() {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
-        val fcmRequestBody = FcmRequest().apply {
-            to = TEST_FCM_TOKEN
-            data.apply {
-                key1 = "メッセージです"
-                key2 = "タイトルです"
-            }
-        }
-        val json = Gson().toJson(fcmRequestBody)
-        val request = Request.Builder()
-            .url("https://fcm.googleapis.com/fcm/send")
-            .addHeader("Authorization", "key=$FCM_SERVER_KEY")
-            .addHeader("Content-Type", "application/json")
-            .post(RequestBody.create(MediaType.parse("application/json"), json))
-            .build()
-        Timber.d("json:$json")
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Timber.d("onFailure e:${e.message}")
-            }
-            override fun onResponse(call: Call, response: Response) {
-                Timber.d("onResponse")
-                response.body()?.string()?.also {
-                    Timber.d("response:$it")
-                }
-
-            }
-        })
-    }
-
     class FcmRequest {
         var to: String = ""
         var data = Data()
@@ -352,7 +316,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000
-        private const val FCM_SERVER_KEY = "AAAA8HfBsYA:APA91bE3uUUxv7iq40wJOKoDc2TfK8fYcXHAuQ451etN-BLRU-ixxoOwAbyZvO6tsUSK_DxMD6F5YVXvwhNSBbi2y4ARPe2PFeSq5N54vwNYos0nay2ywr87wDBqKW5C-xNpucKpKdgd"
         private const val TEST_FCM_TOKEN = "dJYwYoUGRseJeR3V6op2IX:APA91bGNuh7Z_a1BUZRiWVmUdu7Amo8rb3fPJfZxwk0tXJ8KWkE8JXF3yXoPtMEe_mtjlEF_NIXGeCm6FvcpUV9-vUCLSUwKoKunkP_Ef0gPylC4EihGztUcx4PLWRDyOUo2Bdvh3ux3"
     }
 }

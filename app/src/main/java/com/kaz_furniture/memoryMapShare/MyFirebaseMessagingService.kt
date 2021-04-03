@@ -2,10 +2,14 @@ package com.kaz_furniture.memoryMapShare
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.kaz_furniture.memoryMapShare.activity.MapsActivity
 import timber.log.Timber
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
@@ -14,8 +18,15 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 //        super.onMessageReceived(p0)
         val data = remoteMessage.data
         Timber.d("remoteData = $data")
+        val intent1 = Intent(this, MapsActivity::class.java)
+        val resultPendingIntent1: PendingIntent? = TaskStackBuilder.create(this).run {
+            addNextIntent(intent1)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         val notification = NotificationCompat.Builder(this, CHANNEL_ID_1)
-            .setSmallIcon(R.drawable.ic_baseline_more_horiz_24)
+            .setSmallIcon(R.drawable.ic_baseline_map_24)
+            .setContentIntent(resultPendingIntent1)
+            .setAutoCancel(true)
             .setContentTitle(data["key1"])
             .setContentText(data["key2"])
             .build()
@@ -35,39 +46,9 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         notificationManager.notify(0, notification)
     }
 
-//    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-//        remoteMessage?.data?.also { data ->
-//            val title = data["title"]
-//            val message = data["message"]
-//            val builder = if (Build.VERSION_CODES.O <= Build.VERSION.SDK_INT) {
-//                NotificationCompat.Builder(this, CHANNEL_ID)
-//            } else {
-//                NotificationCompat.Builder(this)
-//            }
-//            val notification = builder
-//                .setSmallIcon(R.drawable.dog)     // アイコンは指定必須です
-//                .setContentTitle(title)                 // 通知に表示されるタイトルです
-//                .setContentText(message)                // 通知内容を設定します
-//                .build()
-//            val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//            nm.notify(0, notification)
-//        }
-//    }
+    override fun onNewToken(p0: String) {
+    }
 
-//    override fun onNewToken(p0: String) {
-//        val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//        // Android O(8.0) 以上で通知を使用する場合は通知チャンネルを作成する必要があります
-//        if (Build.VERSION_CODES.O <= Build.VERSION.SDK_INT) {
-//            var channel = nm.getNotificationChannel(CHANNEL_ID)
-//            if (channel == null) {
-//                channel = NotificationChannel(
-//                    CHANNEL_ID,
-//                    "プッシュ通知用のチャンネルです",
-//                    NotificationManager.IMPORTANCE_HIGH)
-//                nm.createNotificationChannel(channel)
-//            }
-//        }
-//    }
 
     companion object {
         private const val CHANNEL_ID_1 = "channel_id_1"
