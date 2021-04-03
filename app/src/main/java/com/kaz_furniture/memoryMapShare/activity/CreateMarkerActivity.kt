@@ -15,7 +15,6 @@ import com.afollestad.materialdialogs.datetime.datePicker
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.R
@@ -133,7 +132,8 @@ class CreateMarkerActivity: BaseActivity() {
     }
 
     private fun launchLoginActivity() {
-        LoginActivity.start(this)
+        val intent = LoginActivity.newIntent(this)
+        startActivity(intent)
     }
 
     private fun launchDateSelectDialog() {

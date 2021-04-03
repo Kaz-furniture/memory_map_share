@@ -41,6 +41,7 @@ class LoginActivity: BaseActivity() {
             binding.passwordError = it
         })
         viewModel.loginSuccess.observe(this, Observer {
+            setResult(RESULT_OK)
             finish()
         })
 
@@ -73,9 +74,7 @@ class LoginActivity: BaseActivity() {
 
     companion object {
         private const val REQUEST_CODE_CREATE = 1001
-        fun start(activity: Activity) =
-            activity.apply {
-                startActivity(Intent(activity, LoginActivity::class.java))
-            }
+        fun newIntent(activity: Activity) =
+            Intent(activity, LoginActivity::class.java)
     }
 }

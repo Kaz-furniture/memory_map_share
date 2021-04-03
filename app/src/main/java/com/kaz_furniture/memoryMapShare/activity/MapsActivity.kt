@@ -25,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
@@ -36,9 +35,6 @@ import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
 import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
-import timber.log.Timber
-import java.io.IOException
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -65,6 +61,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             saveGroupId(newGroupId)
             viewModel.getAllGroup()
             map.clear()
+        }
+    }
+    private val registerForLogin = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            viewModel.getAllUser()
+            viewModel.getAllGroup()
+            viewModel.getAllMarker()
         }
     }
 
@@ -209,7 +213,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-
         startLocationUpdate()
     }
 
@@ -219,7 +222,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun launchLoginActivity() {
-        LoginActivity.start(this)
+        val intent = LoginActivity.newIntent(this)
+        registerForLogin.launch(intent)
     }
 
     private fun launchCreateGroupActivity() {
