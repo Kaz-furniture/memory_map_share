@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allMarkerList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
@@ -33,7 +35,10 @@ import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
+import java.io.IOException
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -44,6 +49,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     lateinit var binding: ActivityMapsBinding
     var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     lateinit var dataStore: SharedPreferences
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it?.resultCode != RESULT_OK) return@registerForActivityResult
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            viewModel.getAllUser()
+            viewModel.getAllMarker()
+            viewModel.getAllGroup()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,6 +148,12 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.groupNameDisplay.text = savedGroupText(savedGroupId)
             initMark(dataStore.getString(KEY_GROUP,""))
         })
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            viewModel.getAllUser()
+            viewModel.getAllMarker()
+            viewModel.getAllGroup()
+        } else binding.groupNameDisplay.text = getString(R.string.privateText)
+        testSendFcm()
     }
 
     private fun initMark(groupId: String?) {
@@ -181,11 +200,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            viewModel.getAllUser()
-            viewModel.getAllMarker()
-            viewModel.getAllGroup()
-        } else binding.groupNameDisplay.text = getString(R.string.privateText)
+
         startLocationUpdate()
     }
 
@@ -200,7 +215,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun launchCreateMarkerActivity() {
         val intent = CreateMarkerActivity.newIntent(this, map.cameraPosition.target.latitude, map.cameraPosition.target.longitude)
-        startActivityForResult(intent, REQUEST_CODE_CREATE)
+        startForResult.launch(intent)
     }
 
     @SuppressLint("MissingPermission")
@@ -269,12 +284,58 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun testSendFcm() {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+        val fcmRequestBody = FcmRequest().apply {
+            to = TEST_FCM_TOKEN
+            data.apply {
+                key1 = "メッセージです"
+                key2 = "タイトルです"
+            }
+        }
+        val json = Gson().toJson(fcmRequestBody)
+        val request = Request.Builder()
+            .url("https://fcm.googleapis.com/fcm/send")
+            .addHeader("Authorization", "key=$FCM_SERVER_KEY")
+            .addHeader("Content-Type", "application/json")
+            .post(RequestBody.create(MediaType.parse("application/json"), json))
+            .build()
+        Timber.d("json:$json")
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Timber.d("onFailure e:${e.message}")
+            }
+            override fun onResponse(call: Call, response: Response) {
+                Timber.d("onResponse")
+                response.body()?.string()?.also {
+                    Timber.d("response:$it")
+                }
+
+            }
+        })
+    }
+
+    class FcmRequest {
+        var to: String = ""
+        var data = Data()
+
+        class Data {
+            var key1 = ""
+            var key2 = ""
+        }
+    }
+
     companion object {
         private const val KEY_GROUP = "key_group"
         private const val DEFAULT_ZOOM_LEVEL = 8F
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000
-        private const val REQUEST_CODE_CREATE = 2000
+        private const val FCM_SERVER_KEY = "AAAA8HfBsYA:APA91bE3uUUxv7iq40wJOKoDc2TfK8fYcXHAuQ451etN-BLRU-ixxoOwAbyZvO6tsUSK_DxMD6F5YVXvwhNSBbi2y4ARPe2PFeSq5N54vwNYos0nay2ywr87wDBqKW5C-xNpucKpKdgd"
+        private const val TEST_FCM_TOKEN = "dJYwYoUGRseJeR3V6op2IX:APA91bGNuh7Z_a1BUZRiWVmUdu7Amo8rb3fPJfZxwk0tXJ8KWkE8JXF3yXoPtMEe_mtjlEF_NIXGeCm6FvcpUV9-vUCLSUwKoKunkP_Ef0gPylC4EihGztUcx4PLWRDyOUo2Bdvh3ux3"
     }
 }

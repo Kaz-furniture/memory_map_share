@@ -56,5 +56,7 @@
     <string name="createMarker">マーカーを作成</string>
     <string name="groupSelect">グループを選択</string>
     <string name="clipboard">クリップボードにコピーしました</string>
-    <string name="uploading">アップロード中...</string>
+    <string name="uploading">アップロード中…</string>
+    <string name="channel_name">通知１</string>
+    <string name="channel_description">通知１</string>
 </resources>

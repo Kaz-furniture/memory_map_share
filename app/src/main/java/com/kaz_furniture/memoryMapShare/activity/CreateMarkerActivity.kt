@@ -60,6 +60,7 @@ class CreateMarkerActivity: BaseActivity() {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 showUploadingDialog()
                 viewModel.imageUpload(uriList)
+                setResult(RESULT_OK)
             } else launchLoginActivity()
         }
         binding.groupNameDisplay.setOnClickListener {

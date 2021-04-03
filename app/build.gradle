@@ -72,7 +72,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
     //activity拡張
-    implementation "androidx.activity:activity-ktx:1.2.0"
+    implementation "androidx.activity:activity-ktx:1.2.2"
     //coroutineScope
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
     // MaterialDialog
@@ -104,4 +104,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //firebase fcmToken
     implementation 'com.google.firebase:firebase-messaging-ktx'
+    //okHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.7.0'
 }
