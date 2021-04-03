@@ -57,7 +57,10 @@
     <string name="groupSelect">グループを選択</string>
     <string name="clipboard">クリップボードにコピーしました</string>
     <string name="uploading">アップロード中…</string>
-    <string name="channel_name">グループ作成</string>
-    <string name="channel_description">自分を含むグループが作成された時に通知します。</string>
-    <string name="channel_content">%1$sさんがグループを作成しました。</string>
+    <string name="channel_name_1">グループ作成</string>
+    <string name="channel_description_1">自分を含むグループが作成された時に通知します。</string>
+    <string name="channel_content_1">%1$sさんがグループを作成しました。</string>
+    <string name="channel_name_2">マーカー登録</string>
+    <string name="channel_description_2">自分を含むグループにて他のユーザーによってマーカーが登録された時に通知します。</string>
+    <string name="channel_content_2">%1$sさんがマーカーを登録しました。</string>
 </resources>

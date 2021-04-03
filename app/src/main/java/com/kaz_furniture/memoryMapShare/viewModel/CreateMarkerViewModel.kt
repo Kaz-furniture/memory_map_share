@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
+import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.extensions.makeByteArray
 import kotlinx.coroutines.launch
@@ -20,11 +23,10 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CreateMarkerViewModel: ViewModel() {
+class CreateMarkerViewModel: BaseViewModel() {
     var calendar: Calendar = Calendar.getInstance()
     var latitude: Double? = null
     var longitude: Double? = null
-    val imageUploaded = MutableLiveData<Int>()
     private var currentTimeMillis = ""
     private val imageUrlList = ArrayList<String>()
     private val imageUploadedIntList = ArrayList<Int>()
@@ -47,7 +49,6 @@ class CreateMarkerViewModel: ViewModel() {
                         imageUploadedInt(index)
                     }
                     .addOnFailureListener {
-                        imageUploaded.postValue(index)
                         Toast.makeText(applicationContext, "UPLOAD_FAILED", Toast.LENGTH_SHORT).show()
                     }
             }
@@ -75,15 +76,30 @@ class CreateMarkerViewModel: ViewModel() {
                 .collection("markers")
                 .document(marker.markerId)
                 .set(marker)
+                .addOnCompleteListener {
+                    sendFcmToEachUsers()
+                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "SUBMIT_FAILED", Toast.LENGTH_SHORT).show()
                 }
     }
 
-    fun imageUploadedInt(index: Int) {
+    private fun sendFcmToEachUsers() {
+        val groupId = selectedGroupId ?: return
+        if (groupId.isBlank() || !allGroupList.map { it.groupId }.contains(groupId)) return
+        allUserList.filter { it.groupIds.contains(groupId) }.forEach {
+            sendFcm(it, TYPE_CREATE_MARKER, applicationContext.getString(R.string.channel_name_2), applicationContext.getString(R.string.channel_content_2, myUser.name))
+        }
+    }
+
+    private fun imageUploadedInt(index: Int) {
         imageUploadedIntList.add(index)
         Timber.d("uploadedIndex = $index, $imageUploadedIntList, $imageListSize")
         if (imageUploadedIntList.size == imageListSize) imageUploadFinished.postValue(true)
+    }
+
+    companion object {
+        private const val TYPE_CREATE_MARKER = 1
     }
 
 }

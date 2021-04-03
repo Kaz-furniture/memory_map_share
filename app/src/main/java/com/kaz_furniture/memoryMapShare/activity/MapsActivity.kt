@@ -298,15 +298,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
-    class FcmRequest {
-        var to: String = ""
-        var data = Data()
-
-        class Data {
-            var key1 = ""
-            var key2 = ""
-        }
-    }
 
     companion object {
         private const val KEY_GROUP_ID = "key_group_id"

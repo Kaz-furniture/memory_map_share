@@ -12,7 +12,7 @@ import java.io.IOException
 
 open class BaseViewModel: ViewModel() {
 
-    fun sendFcm(sendToUser: User, key1: String, key2: String) {
+    fun sendFcm(sendToUser: User,type: Int,  key1: String, key2: String) {
         Timber.d("sendToUser = ${sendToUser.name}")
         if (sendToUser.userId == myUser.userId) return
         Timber.d("sendToUser = ${sendToUser.name}")
@@ -21,9 +21,10 @@ open class BaseViewModel: ViewModel() {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .build()
-        val fcmRequestBody = MapsActivity.FcmRequest().apply {
+        val fcmRequestBody = FcmRequest().apply {
             to = sendToUser.fcmToken
             data.apply {
+                this.type = type
                 this.key1 = key1
                 this.key2 = key2
             }
@@ -50,7 +51,19 @@ open class BaseViewModel: ViewModel() {
         })
     }
 
+    class FcmRequest {
+        var to: String = ""
+        var data = Data()
+
+        class Data {
+            var type = TYPE_CREATE_GROUP
+            var key1 = ""
+            var key2 = ""
+        }
+    }
+
     companion object {
+        private const val TYPE_CREATE_GROUP = 0
         private const val FCM_SERVER_KEY = "AAAA8HfBsYA:APA91bE3uUUxv7iq40wJOKoDc2TfK8fYcXHAuQ451etN-BLRU-ixxoOwAbyZvO6tsUSK_DxMD6F5YVXvwhNSBbi2y4ARPe2PFeSq5N54vwNYos0nay2ywr87wDBqKW5C-xNpucKpKdgd"
     }
 }

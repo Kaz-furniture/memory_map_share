@@ -54,12 +54,18 @@ class CreateGroupViewModel: BaseViewModel() {
                             add(newUser)
                         }
                         sendFcm(
-                            newUser, applicationContext.getString(R.string.channel_name),
-                            applicationContext.getString(R.string.channel_content, myUser.name)
+                            newUser,
+                            TYPE_CREATE_GROUP,
+                            applicationContext.getString(R.string.channel_name_1),
+                            applicationContext.getString(R.string.channel_content_1, myUser.name)
                         )
                         groupCreated.postValue(groupId)
                     }
         }
+    }
+
+    companion object {
+        private const val TYPE_CREATE_GROUP = 0
     }
 
 }

@@ -98,14 +98,15 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                             Timber.e("onLoadFailed message:${e?.message}")
                             myMarker.drawable1 = null
+                            Timber.d("checked 5")
                             marker.showInfoWindow()
                             return true
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             myMarker.drawable1 = resource
-                            Timber.d("checked 4, ${myMarker.drawable2}")
-                            check(myMarker, marker)
+                            Timber.d("checked 4, ${myMarker.drawable1}")
+                            check(myMarker, marker, url2)
                             return true
                         }
                     })
@@ -129,18 +130,23 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             myMarker.drawable2 = resource
                             Timber.d("checked 3")
-                            check(myMarker, marker)
+                            check(myMarker, marker, url2)
                             return true
                         }
                     })
                     .into(binding.imageViewSecond)
         else if (url2.isEmpty()) {
+            Timber.d("url2.1 = $url2, drawable = ${myMarker.drawable1}, ${myMarker.drawable2}")
             binding.imageViewSecond.visibility = View.GONE
-            if (myMarker.drawable1 != null && myMarker.drawable1 == myMarker.drawable2)
+            if (myMarker.drawable1 != null && myMarker.drawable1 == myMarker.drawable2) {
+                Timber.d("url2.2 = $url2, drawable = ${myMarker.drawable1}, ${myMarker.drawable2}")
                 return binding.root
-            else
-                myMarker.drawable2 = myMarker.drawable1
-                marker.showInfoWindow()
+            }
+//            else {
+//                Timber.d("url2.3 = $url2, drawable = ${myMarker.drawable1}, ${myMarker.drawable2}")
+//                myMarker.drawable2 = myMarker.drawable1
+//                check(myMarker, marker, url2)
+//            }
         }
         else
             binding.imageViewSecond.setImageDrawable(myMarker.drawable2)
@@ -151,15 +157,21 @@ class MyInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWindowAd
 //        }
     }
 
-    private fun check(myMyMarker: com.kaz_furniture.memoryMapShare.data.MyMarker, marker: Marker) {
+    private fun check(myMyMarker: com.kaz_furniture.memoryMapShare.data.MyMarker, marker: Marker, url2: String) {
         Timber.d("checked 1")
-        if (myMyMarker.drawable1 == null || myMyMarker.drawable2 == null) {
-            Timber.d("checked 2")
-            return
+        if (url2.isNotBlank()) {
+            if (myMyMarker.drawable1 == null || myMyMarker.drawable2 == null) {
+                Timber.d("checked 2")
+                return
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                marker.showInfoWindow()
+            }, 300L)
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                marker.showInfoWindow()
+            }, 300L)
         }
-        Handler(Looper.getMainLooper()).postDelayed({
-            marker.showInfoWindow()
-        }, 500L)
     }
 
 //    companion object {
