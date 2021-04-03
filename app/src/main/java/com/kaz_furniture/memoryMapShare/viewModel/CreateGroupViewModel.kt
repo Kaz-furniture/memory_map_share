@@ -13,7 +13,7 @@ import timber.log.Timber
 class CreateGroupViewModel: ViewModel() {
     val groupNameInput = MutableLiveData<String>()
     val userAndCheckedList = ArrayList<GroupMemberSelectView.Adapter.UserAndChecked>()
-    val groupCreated = MutableLiveData<Boolean>()
+    val groupCreated = MutableLiveData<String>()
 
     fun createShareGroup() {
         val newGroup = ShareGroup().apply {
@@ -51,7 +51,7 @@ class CreateGroupViewModel: ViewModel() {
                             removeAll { it.userId == userId }
                             add(newUser)
                         }
-                        groupCreated.postValue(true)
+                        groupCreated.postValue(groupId)
                     }
         }
     }

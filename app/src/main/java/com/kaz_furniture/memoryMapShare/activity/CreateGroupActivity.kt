@@ -27,6 +27,13 @@ class CreateGroupActivity: BaseActivity() {
         }
 
         viewModel.groupCreated.observe(this, Observer {
+            setResult(
+                RESULT_OK,
+                Intent().apply {
+                    putExtra(KEY_GROUP_ID, it)
+                    putExtra(KEY_GROUP_NAME, viewModel.groupNameInput.value)
+                }
+            )
             finish()
         })
 
@@ -40,8 +47,10 @@ class CreateGroupActivity: BaseActivity() {
     }
 
     companion object {
-        fun start(activity: Activity) {
-            activity.startActivity(Intent(activity, CreateGroupActivity::class.java))
+        private const val KEY_GROUP_ID = "key_group_id"
+        private const val KEY_GROUP_NAME = "key_group_name"
+        fun newIntent(activity: Activity): Intent {
+            return Intent(activity, CreateGroupActivity::class.java)
         }
     }
 }

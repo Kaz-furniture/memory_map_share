@@ -39,6 +39,8 @@
                     android:paddingStart="12dp"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:paddingEnd="20sp"
                     android:background="@drawable/background_group_display"
                     app:layout_constraintStart_toEndOf="@id/app_title"
@@ -65,27 +67,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/group_name_display"
                     app:layout_constraintEnd_toEndOf="@id/group_name_display"
                     app:layout_constraintStart_toStartOf="@id/vertical_bar"/>
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/outlined_exposed_dropdown_container"-->
-<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="12dp"-->
-<!--                    android:layout_marginEnd="20dp"-->
-<!--                    app:layout_constraintStart_toEndOf="@id/app_title"-->
-<!--                    app:layout_constraintEnd_toStartOf="@id/more_button"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
-
-<!--                    <AutoCompleteTextView-->
-<!--                        android:id="@+id/outlined_exposed_dropdown"-->
-<!--                        android:editable="false"-->
-<!--                        android:maxLines="1"-->
-<!--                        android:ellipsize="end"-->
-<!--                        android:textSize="16sp"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content" />-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"

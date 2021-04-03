@@ -49,12 +49,22 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     lateinit var binding: ActivityMapsBinding
     var currentLatLng: LatLng = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     lateinit var dataStore: SharedPreferences
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it?.resultCode != RESULT_OK) return@registerForActivityResult
+
+    private val registerForCreateMarker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
         if (FirebaseAuth.getInstance().currentUser != null) {
-            viewModel.getAllUser()
             viewModel.getAllMarker()
+        }
+    }
+    private val registerForCreateGroup = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            val newGroupId = result.data?.getStringExtra(KEY_GROUP_ID)
+            val newGroupName = result.data?.getStringExtra(KEY_GROUP_NAME)
+            binding.groupNameDisplay.text = newGroupName
+            saveGroupId(newGroupId)
             viewModel.getAllGroup()
+            map.clear()
         }
     }
 
@@ -100,7 +110,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 }
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     val selectedGroupId = if (menuItem.itemId != 0) myGroupList[menuItem.itemId - 1].groupId else null
-                    binding.groupNameDisplay.text = allGroupList.firstOrNull { value -> value.groupId == selectedGroupId }?.groupName ?:getString(R.string.privateText)
+                    binding.groupNameDisplay.text = savedGroupText(selectedGroupId)
                     saveGroupId(selectedGroupId)
                     initMark(selectedGroupId)
                     return@setOnMenuItemClickListener true
@@ -115,7 +125,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                     when(menuItem.itemId) {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
                         R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
-                        R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else CreateGroupActivity.start(this)
+                        R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchCreateGroupActivity()
                         R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()
@@ -213,9 +223,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         LoginActivity.start(this)
     }
 
+    private fun launchCreateGroupActivity() {
+        val intent = CreateGroupActivity.newIntent(this)
+        registerForCreateGroup.launch(intent)
+    }
+
     private fun launchCreateMarkerActivity() {
         val intent = CreateMarkerActivity.newIntent(this, map.cameraPosition.target.latitude, map.cameraPosition.target.longitude)
-        startForResult.launch(intent)
+        registerForCreateMarker.launch(intent)
     }
 
     @SuppressLint("MissingPermission")
@@ -330,6 +345,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     companion object {
+        private const val KEY_GROUP_ID = "key_group_id"
+        private const val KEY_GROUP_NAME = "key_group_name"
         private const val KEY_GROUP = "key_group"
         private const val DEFAULT_ZOOM_LEVEL = 8F
         private const val DEFAULT_LATITUDE = 35.6598
