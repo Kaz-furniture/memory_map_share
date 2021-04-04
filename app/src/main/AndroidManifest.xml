@@ -65,6 +65,9 @@
             android:name=".activity.AlbumActivity"
             android:parentActivityName=".activity.MyPageActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
+        <activity android:name=".activity.EditGroupActivity"
+            android:parentActivityName=".activity.MapsActivity"/>
         <service android:name=".MyFirebaseMessagingService"
             android:exported="false"
             android:enabled="true">

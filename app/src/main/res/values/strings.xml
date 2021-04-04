@@ -48,8 +48,9 @@
     <string name="noSearchedUser">検索結果はありません</string>
     <string name="removeFriend">解除</string>
     <string name="createGroup">グループを作成</string>
+    <string name="editGroup">グループを編集</string>
     <string name="groupName">グループ名</string>
-    <string name="inputGroupName">グループ名を入力</string>
+    <string name="inputGroupName">新しいグループ名を入力</string>
     <string name="memberSelect">参加するメンバーを選択</string>
     <string name="noFriend">友だちを追加してください</string>
     <string name="create">作成</string>
@@ -63,4 +64,5 @@
     <string name="channel_name_2">マーカー登録</string>
     <string name="channel_description_2">自分を含むグループにて他のユーザーによってマーカーが登録された時に通知します。</string>
     <string name="channel_content_2">%1$sさんがマーカーを登録しました。</string>
+    <string name="selectEditGroup">編集するグループを選択</string>
 </resources>

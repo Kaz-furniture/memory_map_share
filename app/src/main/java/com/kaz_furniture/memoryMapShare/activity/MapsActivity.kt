@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
 import com.google.android.gms.location.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -60,6 +61,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             binding.groupNameDisplay.text = newGroupName
             saveGroupId(newGroupId)
             viewModel.getAllGroup()
+            viewModel.getAllMarker()
             map.clear()
         }
     }
@@ -130,6 +132,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
                         R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
                         R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchCreateGroupActivity()
+                        R.id.edit_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchEditGroupActivity()
                         R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()
@@ -226,6 +229,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         registerForLogin.launch(intent)
     }
 
+    private fun launchEditGroupActivity() {
+        val groupId = dataStore.getString(KEY_GROUP,"") ?:""
+        val groupName = allGroupList.firstOrNull { it.groupId == groupId }?.groupName ?:""
+        val intent = EditGroupActivity.newIntent(this, groupName, groupId)
+        registerForCreateGroup.launch(intent)
+    }
+
     private fun launchCreateGroupActivity() {
         val intent = CreateGroupActivity.newIntent(this)
         registerForCreateGroup.launch(intent)
@@ -311,6 +321,5 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
         private const val PERMISSION_REQUEST_CODE = 1000
-        private const val TEST_FCM_TOKEN = "dJYwYoUGRseJeR3V6op2IX:APA91bGNuh7Z_a1BUZRiWVmUdu7Amo8rb3fPJfZxwk0tXJ8KWkE8JXF3yXoPtMEe_mtjlEF_NIXGeCm6FvcpUV9-vUCLSUwKoKunkP_Ef0gPylC4EihGztUcx4PLWRDyOUo2Bdvh3ux3"
     }
 }

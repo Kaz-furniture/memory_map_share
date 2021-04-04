@@ -14,6 +14,10 @@
         android:title="@string/createGroup"/>
 
     <item
+        android:id="@+id/edit_group"
+        android:title="@string/editGroup"/>
+
+    <item
         android:id="@+id/setting"
         android:title="@string/setting"/>
 
