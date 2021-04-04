@@ -7,5 +7,6 @@ import java.util.*
 class ShareGroup {
     var groupId = "${System.currentTimeMillis()}"
     var createdAt = Date()
+    var deletedAt: Date? = null
     var groupName = ""
 }

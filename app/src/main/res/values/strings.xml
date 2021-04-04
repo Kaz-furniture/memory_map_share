@@ -65,4 +65,7 @@
     <string name="channel_description_2">自分を含むグループにて他のユーザーによってマーカーが登録された時に通知します。</string>
     <string name="channel_content_2">%1$sさんがマーカーを登録しました。</string>
     <string name="selectEditGroup">編集するグループを選択</string>
+    <string name="channel_name_3">グループ編集</string>
+    <string name="channel_description_3">自分を含むグループが編集された時に通知します。</string>
+    <string name="channel_content_3">%1$sさんがグループを編集しました。</string>
 </resources>

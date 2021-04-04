@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
@@ -68,6 +69,19 @@ class EditGroupActivity: BaseActivity() {
                 }
             }.show()
         }
+        binding.createButton.setOnClickListener {
+            viewModel.editShareGroup()
+        }
+        viewModel.groupEdited.observe(this, Observer {
+            setResult(
+                RESULT_OK,
+                Intent().apply {
+                    putExtra(KEY_GROUP_ID, dataStore.getString(KEY_GROUP, ""))
+                    putExtra(KEY_GROUP_NAME, savedGroupText(it))
+                }
+            )
+            finish()
+        })
     }
 
     private fun saveGroupId(groupId: String?) {

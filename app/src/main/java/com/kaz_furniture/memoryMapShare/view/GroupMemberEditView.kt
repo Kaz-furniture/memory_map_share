@@ -70,12 +70,12 @@ class GroupMemberEditView: RecyclerView {
                 userForIcon = data
                 userId.text = MemoryMapShareApplication.applicationContext.getString(R.string.userIdDisplay, data.userId)
                 userName.text = data.name
+                checkBox.isChecked = data.groupIds.contains(viewModel.groupId)
                 val initUserAndChecked = UserAndChecked().apply {
                     userId = data.userId
                     checked = checkBox.isChecked
                 }
                 viewModel.userAndCheckedList.add(initUserAndChecked)
-                checkBox.isChecked = data.groupIds.contains(viewModel.groupId)
                 checkBox.setOnClickListener {
                     val userAndChecked = UserAndChecked().apply {
                         userId = data.userId

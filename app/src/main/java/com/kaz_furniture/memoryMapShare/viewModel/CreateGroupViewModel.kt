@@ -35,13 +35,20 @@ class CreateGroupViewModel: BaseViewModel() {
             userId = myUser.userId
             checked = true
         })
-        userAndCheckedList.filter { it.checked }.map { it.userId }.forEach { userId ->
+        val groupUsers = userAndCheckedList.filter { it.checked }.map { it.userId }
+        groupUsers.forEach { userId ->
             val newUser = allUserList.firstOrNull { it.userId == userId }?.apply {
                 val newList = ArrayList<String>().apply {
                     addAll(groupIds)
                     add(groupId)
                 }
                 groupIds = newList
+                val newUsers = arrayListOf<String>().apply {
+                    addAll(followingUserIds)
+                    addAll(groupUsers.filterNot { followingUserIds.contains(it) || it == userId })
+                }
+                followingUserIds = newUsers
+                Timber.d("followingList = $newUsers")
             } ?:return@forEach
 
             FirebaseFirestore.getInstance()
