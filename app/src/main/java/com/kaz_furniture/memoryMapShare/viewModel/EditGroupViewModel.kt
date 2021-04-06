@@ -1,13 +1,17 @@
 package com.kaz_furniture.memoryMapShare.viewModel
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.applicationContext
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.view.GroupMemberEditView
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditGroupViewModel: BaseViewModel() {
     var groupId = ""
@@ -102,6 +106,23 @@ class EditGroupViewModel: BaseViewModel() {
                 }
         }
         groupEdited.postValue(groupId)
+    }
+
+    fun deleteGroup() {
+        val newGroup = allGroupList.firstOrNull { it.groupId == groupId }?.apply {
+            deletedAt = Date()
+        } ?:return
+        FirebaseFirestore.getInstance()
+            .collection("groups")
+            .document(groupId)
+            .set(newGroup)
+            .addOnCompleteListener {
+                allGroupList.apply {
+                    removeAll { it.groupId == groupId }
+                    add(newGroup)
+                }
+                Toast.makeText(applicationContext, "グループを削除しました", Toast.LENGTH_SHORT).show()
+            }
     }
 
     companion object {

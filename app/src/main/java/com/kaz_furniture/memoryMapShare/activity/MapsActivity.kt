@@ -54,8 +54,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
     private val registerForCreateGroup = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
-        if (FirebaseAuth.getInstance().currentUser != null) {
+        if (result.resultCode == RESULT_FIRST_USER) {
+            saveGroupId(null)
+            viewModel.getAllMarker()
+        } else if (result.resultCode == RESULT_OK && FirebaseAuth.getInstance().currentUser != null) {
             val newGroupId = result.data?.getStringExtra(KEY_GROUP_ID)
             val newGroupName = result.data?.getStringExtra(KEY_GROUP_NAME)
             binding.groupNameDisplay.text = newGroupName
@@ -63,7 +65,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.getAllGroup()
             viewModel.getAllMarker()
             map.clear()
-        }
+        } else return@registerForActivityResult
     }
     private val registerForLogin = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result?.resultCode != RESULT_OK) return@registerForActivityResult
@@ -109,7 +111,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
         binding.groupNameDisplay.setOnClickListener {
             PopupMenu(this, it).also { popupMenu ->
-                val myGroupList = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }
+                val myGroupList = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) && value.deletedAt == null }
                 popupMenu.menu.add(1,0,0, getString(R.string.privateText))
                 myGroupList.forEachIndexed { index, group ->
                     popupMenu.menu.add(1, index + 1, index + 1, group.groupName)

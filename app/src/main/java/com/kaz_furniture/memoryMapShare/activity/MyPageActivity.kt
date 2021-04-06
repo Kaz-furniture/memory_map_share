@@ -59,7 +59,7 @@ class MyPageActivity: BaseActivity() {
         }
         binding.groupNameDisplay.setOnClickListener {
             PopupMenu(this, it).also { popupMenu ->
-                val myGroupList = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) }
+                val myGroupList = allGroupList.filter { value -> myUser.groupIds.contains(value.groupId) && value.deletedAt == null}
                 popupMenu.menu.add(1,0,0, getString(R.string.privateText))
                 myGroupList.forEachIndexed { index, group ->
                     popupMenu.menu.add(1, index + 1, index + 1, group.groupName)

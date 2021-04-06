@@ -47,6 +47,7 @@
     <string name="addButton">追加</string>
     <string name="noSearchedUser">検索結果はありません</string>
     <string name="removeFriend">解除</string>
+    <string name="deleteButton">削除</string>
     <string name="createGroup">グループを作成</string>
     <string name="editGroup">グループを編集</string>
     <string name="groupName">グループ名</string>
@@ -68,4 +69,6 @@
     <string name="channel_name_3">グループ編集</string>
     <string name="channel_description_3">自分を含むグループが編集された時に通知します。</string>
     <string name="channel_content_3">%1$sさんがグループを編集しました。</string>
+    <string name="deleteConfirm">グループを削除しますか？</string>
+    <string name="yes">はい</string>
 </resources>

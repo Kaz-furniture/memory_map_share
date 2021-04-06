@@ -4,16 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.myUser
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityEditGroupBinding
+import com.kaz_furniture.memoryMapShare.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.memoryMapShare.viewModel.EditGroupViewModel
 
 class EditGroupActivity: BaseActivity() {
@@ -46,7 +49,7 @@ class EditGroupActivity: BaseActivity() {
 
         binding.groupNameDisplay.setOnClickListener {
             PopupMenu(this, it).also { popupMenu ->
-                val myGroupList = MemoryMapShareApplication.allGroupList.filter { value -> MemoryMapShareApplication.myUser.groupIds.contains(value.groupId) }
+                val myGroupList = MemoryMapShareApplication.allGroupList.filter { value -> MemoryMapShareApplication.myUser.groupIds.contains(value.groupId) && value.deletedAt == null }
 //                popupMenu.menu.add(1,0,0, getString(R.string.privateText))
                 myGroupList.forEachIndexed { index, group ->
                     popupMenu.menu.add(1, index, index, group.groupName)
@@ -72,6 +75,9 @@ class EditGroupActivity: BaseActivity() {
         binding.createButton.setOnClickListener {
             viewModel.editShareGroup()
         }
+        binding.deleteButton.setOnClickListener {
+            showConfirmDialog()
+        }
         viewModel.groupEdited.observe(this, Observer {
             setResult(
                 RESULT_OK,
@@ -82,6 +88,26 @@ class EditGroupActivity: BaseActivity() {
             )
             finish()
         })
+        title = getString(R.string.editGroup)
+    }
+
+    private fun showConfirmDialog() {
+        MaterialDialog(this).show {
+            title = getString(R.string.deleteConfirm)
+            val binding = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(this@EditGroupActivity), null, false)
+            binding.apply {
+                yesButton.setOnClickListener {
+                    dismiss()
+                    setResult(RESULT_FIRST_USER)
+                    viewModel.deleteGroup()
+                    finish()
+                }
+                cancelButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            setContentView(binding.root)
+        }
     }
 
     private fun saveGroupId(groupId: String?) {
