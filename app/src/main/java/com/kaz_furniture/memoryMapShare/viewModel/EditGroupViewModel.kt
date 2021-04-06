@@ -4,15 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication
 import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allGroupList
+import com.kaz_furniture.memoryMapShare.MemoryMapShareApplication.Companion.allUserList
 import com.kaz_furniture.memoryMapShare.R
-import com.kaz_furniture.memoryMapShare.data.ShareGroup
 import com.kaz_furniture.memoryMapShare.view.GroupMemberEditView
-import com.kaz_furniture.memoryMapShare.view.GroupMemberSelectView
 import timber.log.Timber
 
 class EditGroupViewModel: BaseViewModel() {
     var groupId = ""
     val groupNameInput = MutableLiveData<String>()
+    val userAndCheckedListFirst = ArrayList<GroupMemberEditView.Adapter.UserAndChecked>()
     val userAndCheckedList = ArrayList<GroupMemberEditView.Adapter.UserAndChecked>()
     val groupEdited = MutableLiveData<String>()
 
@@ -69,9 +69,39 @@ class EditGroupViewModel: BaseViewModel() {
                         MemoryMapShareApplication.applicationContext.getString(R.string.channel_name_3),
                         MemoryMapShareApplication.applicationContext.getString(R.string.channel_content_3, MemoryMapShareApplication.myUser.name)
                     )
-                    groupEdited.postValue(groupId)
                 }
         }
+        val formerCheckedList = arrayListOf<GroupMemberEditView.Adapter.UserAndChecked>().apply {
+            addAll(userAndCheckedListFirst)
+        }.filter { it.checked }
+        val latterUncheckedList = arrayListOf<GroupMemberEditView.Adapter.UserAndChecked>().apply {
+            addAll(userAndCheckedList)
+        }.filter { !it.checked }
+        Timber.d("checkedList = ${formerCheckedList.map { it.userId }}, ${latterUncheckedList.map { it.userId }}")
+        val changedToFalseList = formerCheckedList.filter { value -> latterUncheckedList.map { it.userId }.contains(value.userId) }
+        changedToFalseList.map { it.userId }.forEach { userId ->
+            val newUser = allUserList.firstOrNull { it.userId == userId }?.apply {
+                val newGroupIds = arrayListOf<String>().apply {
+                    addAll(groupIds)
+                    removeAll { it == groupId }
+                }
+                groupIds = newGroupIds
+            } ?:return@forEach
+
+            Timber.d("checkedList2 = ${newUser.name}")
+
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .set(newUser)
+                .addOnCompleteListener {
+                    allUserList.apply {
+                        removeAll { it.userId == userId }
+                        add(newUser)
+                    }
+                }
+        }
+        groupEdited.postValue(groupId)
     }
 
     companion object {

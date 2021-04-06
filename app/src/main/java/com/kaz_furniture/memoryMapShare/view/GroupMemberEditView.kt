@@ -75,6 +75,7 @@ class GroupMemberEditView: RecyclerView {
                     userId = data.userId
                     checked = checkBox.isChecked
                 }
+                viewModel.userAndCheckedListFirst.add(initUserAndChecked)
                 viewModel.userAndCheckedList.add(initUserAndChecked)
                 checkBox.setOnClickListener {
                     val userAndChecked = UserAndChecked().apply {
