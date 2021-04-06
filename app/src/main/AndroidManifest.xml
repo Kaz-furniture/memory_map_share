@@ -68,6 +68,8 @@
 
         <activity android:name=".activity.EditGroupActivity"
             android:parentActivityName=".activity.MapsActivity"/>
+        <activity android:name=".activity.EditMarkerActivity"
+            android:parentActivityName=".activity.AlbumActivity"/>
         <service android:name=".MyFirebaseMessagingService"
             android:exported="false"
             android:enabled="true">

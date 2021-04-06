@@ -135,7 +135,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                         R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
                         R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchCreateGroupActivity()
                         R.id.edit_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchEditGroupActivity()
-                        R.id.setting -> return@setOnMenuItemClickListener true
+//                        R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()
                             myUser = User()
@@ -309,7 +309,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 myMarker.imageIdList,
                 myMarker.locationName,
                 android.text.format.DateFormat.format(getString(R.string.date), myMarker.memoryTime).toString(),
-                myMarker.memo
+                myMarker.memo,
+                myMarker.markerId
             )
         }
     }

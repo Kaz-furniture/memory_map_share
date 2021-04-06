@@ -17,9 +17,9 @@
         android:id="@+id/edit_group"
         android:title="@string/editGroup"/>
 
-    <item
-        android:id="@+id/setting"
-        android:title="@string/setting"/>
+<!--    <item-->
+<!--        android:id="@+id/setting"-->
+<!--        android:title="@string/setting"/>-->
 
     <item
         android:id="@+id/logout"

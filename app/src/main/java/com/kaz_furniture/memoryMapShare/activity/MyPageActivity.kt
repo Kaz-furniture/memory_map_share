@@ -27,7 +27,6 @@ class MyPageActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_my_page)
         binding.lifecycleOwner = this
-        viewModel.loadMarker()
         binding.userIdTextView.text = getString(R.string.userIdDisplay, myUser.userId)
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE)
         val savedGroupId = dataStore.getString(KEY_GROUP,"")
@@ -88,8 +87,15 @@ class MyPageActivity: BaseActivity() {
                 it.imageIdList,
                 it.locationName,
                 android.text.format.DateFormat.format(getString(R.string.date), it.memoryTime).toString(),
-                it.memo)
+                it.memo,
+                it.markerId
+            )
         })
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        viewModel.loadMarker()
     }
 
     private fun refreshWithReverse() {

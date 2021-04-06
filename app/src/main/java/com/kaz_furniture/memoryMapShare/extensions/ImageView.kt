@@ -14,6 +14,7 @@ fun ImageView.exampleImageFirst(myMarker: MyMarker) {
     if (myMarker.imageIdList.isNullOrEmpty()) setImageBitmap(null)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(myMarker.imageIdList[0]))
             .placeholder(R.drawable.loading_image)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
 }
 
@@ -22,6 +23,7 @@ fun ImageView.exampleImageSecond(myMarker: MyMarker) {
     if (myMarker.imageIdList.size <= 1) setImageBitmap(null)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(myMarker.imageIdList[1]))
             .placeholder(R.drawable.loading_image)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
 }
 
@@ -30,6 +32,7 @@ fun ImageView.exampleImageThird(myMarker: MyMarker) {
     if (myMarker.imageIdList.size <= 2) setImageBitmap(null)
     else GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(myMarker.imageIdList[2]))
             .placeholder(R.drawable.loading_image)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
 }
 

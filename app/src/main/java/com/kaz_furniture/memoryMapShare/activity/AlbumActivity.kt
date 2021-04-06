@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityAlbumBinding
 import com.kaz_furniture.memoryMapShare.fragment.ImageDisplayFragment
@@ -15,6 +17,21 @@ import kotlin.collections.ArrayList
 class AlbumActivity: BaseActivity() {
     private val viewModel: AlbumViewModel by viewModels()
     lateinit var binding: ActivityAlbumBinding
+    var memo = ""
+
+    private val registerForEditMarker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
+        result.data?.getStringExtra(KEY_NAME)?.also {
+            binding.titleView.text = it
+        }
+        result.data?.getStringExtra(KEY_MEMO_BACK)?.also {
+            binding.memoTextView.text = it
+            memo = it
+        }
+        result.data?.getStringExtra(KEY_DATE_BACK)?.also {
+            binding.dateDisplay.text = it
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +47,7 @@ class AlbumActivity: BaseActivity() {
             binding.dateDisplay.text = it
         }
         intent.getStringExtra(KEY_MEMO)?.also {
+            memo = it
             if (it.isBlank())
                 binding.memoTextView.visibility = View.GONE
             else
@@ -39,6 +57,9 @@ class AlbumActivity: BaseActivity() {
         }
         binding.backButton.setOnClickListener {
             onBackPressed()
+        }
+        binding.editButton.setOnClickListener {
+            launchEditMarkerActivity()
         }
 
         viewModel.imageClickedLiveData.observe(this, androidx.lifecycle.Observer {
@@ -51,17 +72,33 @@ class AlbumActivity: BaseActivity() {
         })
     }
 
+    private  fun launchEditMarkerActivity() {
+        val newIntent = EditMarkerActivity.newIntent(
+            this,
+            binding.titleView.text.toString(),
+            memo,
+            binding.dateDisplay.text.toString(),
+            intent.getStringExtra(KEY_MARKER_ID) ?:""
+        )
+        registerForEditMarker.launch(newIntent)
+    }
+
     companion object {
+        private const val KEY_NAME = "key_name"
         private const val KEY_MEMO = "key_memo"
+        private const val KEY_MEMO_BACK = "key_memo_back"
         private const val KEY_IMAGES = "key_image_ids"
         private const val KEY_LOCATION_NAME = "key_location_name"
         private const val KEY_DATE = "key_date"
-        fun start(activity: Activity, imageIdList: ArrayList<String>, locationName: String, memoryTime: String, memo: String) {
+        private const val KEY_DATE_BACK = "key_date_back"
+        private const val KEY_MARKER_ID = "key_marker_id"
+        fun start(activity: Activity, imageIdList: ArrayList<String>, locationName: String, memoryTime: String, memo: String, markerId: String) {
             activity.startActivity(Intent(activity, AlbumActivity::class.java).apply {
                 putExtra(KEY_MEMO, memo)
                 putExtra(KEY_IMAGES, imageIdList)
                 putExtra(KEY_LOCATION_NAME, locationName)
                 putExtra(KEY_DATE, memoryTime)
+                putExtra(KEY_MARKER_ID, markerId)
             })
         }
     }
