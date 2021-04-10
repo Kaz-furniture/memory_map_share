@@ -18,6 +18,8 @@ class EditMarkerViewModel: BaseViewModel() {
             newDate?.also {
                 memoryTime = it
             }
+            drawable1 = null
+            drawable2 = null
         } ?:return
 
         FirebaseFirestore.getInstance()
@@ -28,6 +30,24 @@ class EditMarkerViewModel: BaseViewModel() {
                 allMarkerList.apply {
                     removeAll { it.markerId == newMarker.markerId }
                     add(newMarker)
+                }
+            }
+    }
+
+    fun deleteMarker(markerId: String) {
+        val newMarker = allMarkerList.firstOrNull { it.markerId == markerId }?.apply {
+            deletedAt = Date()
+            drawable1 = null
+            drawable2 = null
+        } ?:return
+
+        FirebaseFirestore.getInstance()
+            .collection("markers")
+            .document(newMarker.markerId)
+            .set(newMarker)
+            .addOnCompleteListener {
+                allMarkerList.apply {
+                    removeAll {it.markerId == newMarker.markerId}
                 }
             }
     }

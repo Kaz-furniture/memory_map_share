@@ -44,6 +44,11 @@ class EditMarkerActivity: BaseActivity() {
             })
             finish()
         }
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteMarker(intent.getStringExtra(KEY_MARKER_ID) ?:return@setOnClickListener)
+            setResult(RESULT_FIRST_USER)
+            finish()
+        }
 
         title = getString(R.string.edit_marker2)
     }

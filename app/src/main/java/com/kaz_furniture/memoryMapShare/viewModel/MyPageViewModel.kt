@@ -23,7 +23,7 @@ class MyPageViewModel: ViewModel() {
                     if (task.isSuccessful) {
                         val fetchedList = ArrayList<MyMarker>().apply {
                             clear()
-                            addAll(result)
+                            addAll(result.filter { it.deletedAt == null })
                             sortedBy { it.memoryTime }
                         }
                         allMarkerList = fetchedList

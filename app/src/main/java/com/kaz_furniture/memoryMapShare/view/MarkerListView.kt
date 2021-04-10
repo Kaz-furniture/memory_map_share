@@ -69,19 +69,9 @@ class MarkerListView: RecyclerView {
                 locationName.text = data.locationName
                 memoDisplay.text = data.memo
                 memoryTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.date), data.memoryTime)
-                imageView1.setOnClickListener {
+                root.setOnClickListener {
                     viewModel.launchAlbumActivity(data)
                 }
-                imageView2.setOnClickListener {
-                    viewModel.launchAlbumActivity(data)
-                }
-                imageView3.setOnClickListener {
-                    viewModel.launchAlbumActivity(data)
-                }
-                moreHorizon.setOnClickListener {
-                    viewModel.launchAlbumActivity(data)
-                }
-
             }
 
             when {

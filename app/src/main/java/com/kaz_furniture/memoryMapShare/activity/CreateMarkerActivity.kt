@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.PopupMenu
 import androidx.activity.viewModels
@@ -59,7 +61,9 @@ class CreateMarkerActivity: BaseActivity() {
         binding.submitButton.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 showUploadingDialog()
-                viewModel.imageUpload(uriList)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewModel.imageUpload(uriList)
+                }, 300L)
             } else launchLoginActivity()
         }
         binding.groupNameDisplay.setOnClickListener {
@@ -90,9 +94,9 @@ class CreateMarkerActivity: BaseActivity() {
         MaterialDialog(this).show {
             cancelable(false)
             val binding = DialogUploadingImagesBinding.inflate(LayoutInflater.from(this@CreateMarkerActivity), null, false)
-            chartSetting(binding, 0f)
+            chartSetting(binding, 0.03f)
             setContentView(binding.root)
-            binding.pieChart.centerText = "0%"
+            binding.pieChart.centerText = "3%"
             viewModel.uploadRatio.observe(this@CreateMarkerActivity, androidx.lifecycle.Observer {
                 chartSetting(binding, it)
                 binding.pieChart.centerText = "${(it * 100).roundToInt()}%"

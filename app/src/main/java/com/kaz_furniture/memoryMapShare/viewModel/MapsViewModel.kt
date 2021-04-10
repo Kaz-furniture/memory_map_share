@@ -72,11 +72,12 @@ class MapsViewModel: ViewModel() {
         FirebaseFirestore.getInstance()
                 .collection("markers")
                 .get()
-                .addOnCompleteListener {
-                    val result = it.result?.toObjects(MyMarker::class.java) ?: listOf()
+                .addOnCompleteListener { task ->
+                    val result = task.result?.toObjects(MyMarker::class.java) ?: listOf()
                     allMarkerList.apply {
                         clear()
-                        addAll(result)
+                        addAll(result.filter { it.deletedAt == null })
+                        sortedBy { it.memoryTime }
                     }
                     markerFinished.postValue(true)
                 }

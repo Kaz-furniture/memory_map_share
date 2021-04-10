@@ -93,11 +93,6 @@ class MyPageActivity: BaseActivity() {
         })
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
-        viewModel.loadMarker()
-    }
-
     private fun refreshWithReverse() {
         if (isReversed) {
             if (!selectedGroupId.isNullOrBlank())
@@ -114,6 +109,7 @@ class MyPageActivity: BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadMarker()
         binding.userForIcon = myUser
         binding.userNameView.text = myUser.name
     }

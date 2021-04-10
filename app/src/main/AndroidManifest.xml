@@ -35,7 +35,7 @@
         <activity
             android:name="com.kaz_furniture.memoryMapShare.activity.MapsActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,23 +43,30 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.CreateMarkerActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.MapsActivity"/>
         <activity android:name=".activity.LoginActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.MapsActivity"/>
-        <activity android:name=".activity.CreateAccountActivity"/>
-        <activity android:name=".activity.PasswordForgetActivity"/>
+        <activity android:name=".activity.CreateAccountActivity"
+            android:theme="@style/Theme.AppCompat"/>
+        <activity android:name=".activity.PasswordForgetActivity"
+            android:theme="@style/Theme.AppCompat"/>
         <activity android:name=".activity.MyPageActivity"
             android:parentActivityName=".activity.MapsActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.ProfileEditActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.MyPageActivity"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.FriendSearchActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.MapsActivity"/>
         <activity android:name=".activity.CreateGroupActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.MapsActivity"/>
         <activity
             android:name=".activity.AlbumActivity"
@@ -67,8 +74,11 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <activity android:name=".activity.EditGroupActivity"
+            android:theme="@style/Theme.AppCompat"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".activity.MapsActivity"/>
         <activity android:name=".activity.EditMarkerActivity"
+            android:theme="@style/Theme.AppCompat"
             android:parentActivityName=".activity.AlbumActivity"/>
         <service android:name=".MyFirebaseMessagingService"
             android:exported="false"

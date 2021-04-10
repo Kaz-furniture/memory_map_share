@@ -49,21 +49,16 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private val registerForCreateMarker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result?.resultCode != RESULT_OK) return@registerForActivityResult
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            viewModel.getAllMarker()
-        }
     }
     private val registerForCreateGroup = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_FIRST_USER) {
             saveGroupId(null)
-            viewModel.getAllMarker()
         } else if (result.resultCode == RESULT_OK && FirebaseAuth.getInstance().currentUser != null) {
             val newGroupId = result.data?.getStringExtra(KEY_GROUP_ID)
             val newGroupName = result.data?.getStringExtra(KEY_GROUP_NAME)
             binding.groupNameDisplay.text = newGroupName
             saveGroupId(newGroupId)
             viewModel.getAllGroup()
-            viewModel.getAllMarker()
             map.clear()
         } else return@registerForActivityResult
     }
@@ -72,7 +67,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         if (FirebaseAuth.getInstance().currentUser != null) {
             viewModel.getAllUser()
             viewModel.getAllGroup()
-            viewModel.getAllMarker()
         }
     }
 
@@ -169,7 +163,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         })
         if (FirebaseAuth.getInstance().currentUser != null) {
             viewModel.getAllUser()
-            viewModel.getAllMarker()
             viewModel.getAllGroup()
         } else binding.groupNameDisplay.text = getString(R.string.privateText)
     }
@@ -218,6 +211,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
+        if (FirebaseAuth.getInstance().currentUser != null) viewModel.getAllMarker()
         startLocationUpdate()
     }
 

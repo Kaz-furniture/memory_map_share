@@ -20,16 +20,21 @@ class AlbumActivity: BaseActivity() {
     var memo = ""
 
     private val registerForEditMarker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result?.resultCode != RESULT_OK) return@registerForActivityResult
-        result.data?.getStringExtra(KEY_NAME)?.also {
-            binding.titleView.text = it
-        }
-        result.data?.getStringExtra(KEY_MEMO_BACK)?.also {
-            binding.memoTextView.text = it
-            memo = it
-        }
-        result.data?.getStringExtra(KEY_DATE_BACK)?.also {
-            binding.dateDisplay.text = it
+        when (result?.resultCode) {
+            RESULT_FIRST_USER -> finish()
+            RESULT_OK -> {
+                result.data?.getStringExtra(KEY_NAME)?.also {
+                    binding.titleView.text = it
+                }
+                result.data?.getStringExtra(KEY_MEMO_BACK)?.also {
+                    binding.memoTextView.text = it
+                    memo = it
+                }
+                result.data?.getStringExtra(KEY_DATE_BACK)?.also {
+                    binding.dateDisplay.text = it
+                }
+            }
+            else -> return@registerForActivityResult
         }
     }
 
@@ -72,7 +77,7 @@ class AlbumActivity: BaseActivity() {
         })
     }
 
-    private  fun launchEditMarkerActivity() {
+    private fun launchEditMarkerActivity() {
         val newIntent = EditMarkerActivity.newIntent(
             this,
             binding.titleView.text.toString(),
