@@ -21,7 +21,8 @@ class FriendSearchViewModel: ViewModel() {
                 .get()
                 .addOnCompleteListener { task ->
                     val result = task.result?.toObjects(User::class.java) ?: listOf()
-                    searchedUsersList.postValue(result.filter { it.name == inputTextValue || it.userId == inputTextValue })
+//                    searchedUsersList.postValue(result.filter { it.name == inputTextValue || it.userId == inputTextValue })
+                    searchedUsersList.postValue(result.filter { inputTextValue.toRegex().containsMatchIn(it.name) || inputTextValue.toRegex().containsMatchIn(it.userId) })
                 }
     }
 
