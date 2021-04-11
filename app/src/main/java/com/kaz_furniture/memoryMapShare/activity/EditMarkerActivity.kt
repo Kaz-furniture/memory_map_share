@@ -3,12 +3,14 @@ package com.kaz_furniture.memoryMapShare.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.databinding.ActivityEditMarkerBinding
+import com.kaz_furniture.memoryMapShare.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.memoryMapShare.viewModel.EditMarkerViewModel
 import java.util.*
 
@@ -45,12 +47,30 @@ class EditMarkerActivity: BaseActivity() {
             finish()
         }
         binding.deleteButton.setOnClickListener {
-            viewModel.deleteMarker(intent.getStringExtra(KEY_MARKER_ID) ?:return@setOnClickListener)
-            setResult(RESULT_FIRST_USER)
-            finish()
+            showConfirmDialog()
         }
 
         title = getString(R.string.edit_marker2)
+    }
+
+    private fun showConfirmDialog() {
+        MaterialDialog(this).show {
+            title = getString(R.string.deleteConfirm)
+            val binding = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(this@EditMarkerActivity), null, false)
+            binding.apply {
+                titleTextView.text = getString(R.string.deleteMarkerConfirm)
+                yesButton.setOnClickListener {
+                    dismiss()
+                    setResult(RESULT_FIRST_USER)
+                    viewModel.deleteMarker(intent.getStringExtra(KEY_MARKER_ID) ?:return@setOnClickListener)
+                    finish()
+                }
+                cancelButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            setContentView(binding.root)
+        }
     }
 
     private fun launchDateSelectDialog() {

@@ -102,7 +102,7 @@
                 android:id="@+id/delete_button"
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/deleteButton"
+                android:text="@string/deleteMarker"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/date_select_button"

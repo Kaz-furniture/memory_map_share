@@ -128,7 +128,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                         R.id.myPage -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else MyPageActivity.start(this)
                         R.id.addFriend -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else FriendSearchActivity.start(this)
                         R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchCreateGroupActivity()
-                        R.id.edit_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchEditGroupActivity()
+                        R.id.edit_group -> editGroupSelected()
 //                        R.id.setting -> return@setOnMenuItemClickListener true
                         R.id.logout -> {
                             FirebaseAuth.getInstance().signOut()
@@ -151,7 +151,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                     currentLatLng = LatLng(location.latitude, location.longitude)
                     updateCount++
 //                    if (updateCount == 1) map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM_LEVEL))
-                    binding.locationText.text = getString(R.string.locationText, updateCount, location.longitude, location.latitude)
+//                    binding.locationText.text = getString(R.string.locationText, updateCount, location.longitude, location.latitude)
                 }
             }
         }
@@ -182,7 +182,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
 
+    private fun editGroupSelected() {
+        if (allGroupList.none { value -> myUser.groupIds.contains(value.groupId) && value.deletedAt == null }) {
+            Toast.makeText(this, "グループがありません", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchEditGroupActivity()
     }
 
     private fun saveGroupId(groupId: String?) {
