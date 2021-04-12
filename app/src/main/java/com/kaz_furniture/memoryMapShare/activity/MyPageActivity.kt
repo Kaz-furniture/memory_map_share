@@ -94,6 +94,7 @@ class MyPageActivity: BaseActivity() {
     }
 
     private fun refreshWithReverse() {
+        Timber.d("groupId = $selectedGroupId")
         if (isReversed) {
             if (!selectedGroupId.isNullOrBlank())
                 binding.markerListView.customAdapter.refresh(allMarkerList.filter { value -> value.groupId == selectedGroupId }.asReversed())
@@ -115,7 +116,7 @@ class MyPageActivity: BaseActivity() {
     }
 
     companion object {
-        private const val KEY_GROUP = "key_group"
+        private const val KEY_GROUP = "key_group_pro"
         private const val KEY_IS_REVERSED = "key_is_reversed"
         fun start(activity: Activity) {
             activity.startActivity(Intent(activity, MyPageActivity::class.java))
