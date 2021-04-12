@@ -39,16 +39,19 @@ class EditMarkerActivity: BaseActivity() {
         }
         binding.submitButton.setOnClickListener {
             viewModel.submitMarker(intent.getStringExtra(KEY_MARKER_ID) ?:return@setOnClickListener)
-            setResult(RESULT_OK, Intent().apply {
-                putExtra(KEY_NAME, viewModel.locationNameInput.value)
-                putExtra(KEY_MEMO_BACK, viewModel.memoInput.value)
-                putExtra(KEY_DATE_BACK, android.text.format.DateFormat.format(getString(R.string.date), viewModel.newDate) ?:binding.timeDateDisplay.text.toString())
-            })
-            finish()
         }
         binding.deleteButton.setOnClickListener {
             showConfirmDialog()
         }
+
+        viewModel.memoryTimeLiveData.observe(this, androidx.lifecycle.Observer {
+            setResult(RESULT_OK, Intent().apply {
+                putExtra(KEY_NAME, viewModel.locationNameInput.value)
+                putExtra(KEY_MEMO_BACK, viewModel.memoInput.value)
+                putExtra(KEY_DATE_BACK, it)
+            })
+            finish()
+        })
 
         title = getString(R.string.edit_marker2)
     }

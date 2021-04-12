@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -34,8 +35,10 @@ import com.kaz_furniture.memoryMapShare.R
 import com.kaz_furniture.memoryMapShare.data.MyMarker
 import com.kaz_furniture.memoryMapShare.data.User
 import com.kaz_furniture.memoryMapShare.databinding.ActivityMapsBinding
+import com.kaz_furniture.memoryMapShare.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.memoryMapShare.viewModel.MapsViewModel
 import okhttp3.*
+import timber.log.Timber
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
@@ -130,13 +133,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                         R.id.create_group -> if (FirebaseAuth.getInstance().currentUser == null) launchLoginActivity() else launchCreateGroupActivity()
                         R.id.edit_group -> editGroupSelected()
 //                        R.id.setting -> return@setOnMenuItemClickListener true
-                        R.id.logout -> {
-                            FirebaseAuth.getInstance().signOut()
-                            myUser = User()
-                            binding.groupNameDisplay.text = getString(R.string.privateText)
-                            map.clear()
-                            Toast.makeText(this, "ログアウトしました", Toast.LENGTH_SHORT).show()
-                        }
+                        R.id.logout -> showConfirmDialog()
                     }
                     return@setOnMenuItemClickListener true
                 }
@@ -169,6 +166,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun initMark(groupId: String?) {
         map.clear()
+        Timber.d("groupId = $groupId")
         if (groupId.isNullOrBlank()) {
             for (value in allMarkerList.filter { it.groupId == myUser.userId }) {
                 map.addMarker(MarkerOptions().position(LatLng(value.latLng.latitude, value.latLng.longitude))).apply {
@@ -181,6 +179,28 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                     tag = value
                 }
             }
+        }
+    }
+
+    private fun showConfirmDialog() {
+        MaterialDialog(this).show {
+            title = getString(R.string.logoutConfirm)
+            val bindingDialog = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(this@MapsActivity), null, false)
+            bindingDialog.apply {
+                titleTextView.text = getString(R.string.logoutConfirm)
+                yesButton.setOnClickListener {
+                    dismiss()
+                    FirebaseAuth.getInstance().signOut()
+                    myUser = User()
+                    binding.groupNameDisplay.text = getString(R.string.privateText)
+                    map.clear()
+                    Toast.makeText(this@MapsActivity, "ログアウトしました", Toast.LENGTH_SHORT).show()
+                }
+                cancelButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            setContentView(bindingDialog.root)
         }
     }
 
@@ -320,7 +340,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     companion object {
         private const val KEY_GROUP_ID = "key_group_id"
         private const val KEY_GROUP_NAME = "key_group_name"
-        private const val KEY_GROUP = "key_group"
+        private const val KEY_GROUP = "key_group_pro"
         private const val DEFAULT_ZOOM_LEVEL = 8F
         private const val DEFAULT_LATITUDE = 35.6598
         private const val DEFAULT_LONGITUDE = 139.7024
